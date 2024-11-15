@@ -25,7 +25,7 @@ public class Usuario implements UserDetails {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private Rol tipo_Usuario;
+    private TipoUsuario tipo_Usuario;
 
     // Getters y Setters
 
@@ -65,6 +65,7 @@ public class Usuario implements UserDetails {
     }
 }
 
-enum tgtrijhknfdbvbfgdvfdggdv
-    USER
+enum TipoUsuario {
+    admin,
+    user
 }
