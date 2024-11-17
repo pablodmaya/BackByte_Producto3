@@ -15,4 +15,6 @@ public class HomeController {
         model.addAttribute("ciudades", Ciudad.values()); // Pasamos las opciones del enum al modelo
         return "home";  // Esta es la vista home.html
     }
+
+
 }

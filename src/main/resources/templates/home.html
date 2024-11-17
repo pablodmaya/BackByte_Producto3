@@ -18,27 +18,17 @@
 
     <!-- Main Image Section -->
     <div class="main-image">
-        <form class="search-form">
+
+        <form class="search-form" action="/buscar-vehiculos" method="GET">
             <!-- Fila 1: Selección de tipo de vehículo -->
             <div class="vehicle-type">
-                <input type="radio" id="car" name="vehicleType" value="car" checked>
+                <input type="radio" id="car" name="vehicleType" value="Coche" checked>
                 <label for="car">Coche</label>
-                <input type="radio" id="motorcycle" name="vehicleType" value="motorcycle">
+                <input type="radio" id="motorcycle" name="vehicleType" value="Moto">
                 <label for="motorcycle">Moto</label>
             </div>
 
-            <!-- Fila 2: Lugar de recogida y destino -->
-       <!--     <div class="row">
-                <div class="form-group">
-                    <label for="pickupLocation">Ciudad de recogida</label>
-                    <input type="text" id="pickupLocation" name="pickupLocation" placeholder="Ciudad de recogida" required>
-                </div>
-                <div class="form-group">
-                    <label for="dropoffLocation">Ciudad de destino</label>
-                    <input type="text" id="dropoffLocation" name="dropoffLocation" placeholder="Ciudad de destino" required>
-                </div>
-            </div>
-        -->
+
 
             <!-- Fila 2: Lugar de recogida y destino -->
             <div class="row">

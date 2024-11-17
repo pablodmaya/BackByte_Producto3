@@ -1,10 +1,10 @@
 /* Reset de márgenes y padding */
 html, body {
-    height: 100%;
+    height: auto;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Evita barras laterales horizontales */
-    overflow-y: hidden;
+    overflow-y: auto;
     font-family: 'Times New Roman', Times, serif; /* Fuente predeterminada para todo el sitio */
 }
 

@@ -44,7 +44,7 @@ public class VehiculoController {
                               @RequestParam(required = false) Integer cc) {
         Vehiculo nuevoVehiculo;
 
-        if (tipoVehiculo == TipoVehiculo.Coche) {
+        if (tipoVehiculo == TipoVehiculo.Coche){
             Coche coche = new Coche();
             coche.setPuertas(puertas);
             coche.setColor(color);

@@ -1,7 +1,6 @@
 package com.backbyte.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,10 +9,21 @@ import java.util.Date;
 @Entity
 public class Alquiler {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_Alquiler;
-    private Integer id_Vehiculo;
-    private Integer id_Cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_Vehiculo")  // Establece la relación con Vehiculo
+    private Vehiculo vehiculo;  // Relación con la clase Vehiculo
+
+    @ManyToOne
+    @JoinColumn(name = "id_Cliente")  // Relación con la clase Cliente
+    private Cliente cliente;  // Relación con la clase Cliente
+
+    @Column(name = "fecha_inicio")
     private Date fecha_Inicio;
+
+    @Column(name = "fecha_fin")
     private Date fecha_Fin;
 
 }
