@@ -15,11 +15,16 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_Usuario;
 
-    @Column(unique = true, nullable = false)
-    private String nombre_Usuario;
+    @Column(name = "nombre_Usuario", unique = true, nullable = false)
+    private String nombreUsuario;
 
-    @Column(nullable = false)
-    private String password;
+    // Contraseña en texto claro (sin encriptar), necesaria para el registro
+    @Column(name = "password", nullable = false)
+    private String password;  // Este campo es el que recibes del formulario (sin encriptar)
+
+    // Contraseña encriptada, que es la que utilizas para la autenticación
+    @Column(name = "password_Encriptada", nullable = false)
+    private String passwordEncriptada;  // Este es el campo que se usa para la autenticación
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -27,8 +32,7 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipo_Usuario;
 
-    // Getters y Setters
-
+    // Métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(() -> "ROLE_" + tipo_Usuario.name());
@@ -36,12 +40,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return passwordEncriptada;  // Se debe devolver la contraseña encriptada para la autenticación
     }
 
     @Override
     public String getUsername() {
-        return nombre_Usuario;
+        return nombreUsuario;
     }
 
     @Override
@@ -63,6 +67,57 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    // Getters y setters adicionales
+    public Integer getId_Usuario() {
+        return id_Usuario;
+    }
+
+    public void setId_Usuario(Integer id_Usuario) {
+        this.id_Usuario = id_Usuario;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getPasswordClear() {
+        return password;  // Método adicional para acceder a la contraseña sin encriptar (si es necesario en algún lugar)
+    }
+
+    public void setPassword(String password) {
+        this.password = password;  // Este es el setter para la contraseña sin encriptar
+    }
+
+    public void setPasswordEncriptada(String passwordEncriptada) {
+        this.passwordEncriptada = passwordEncriptada;  // Este es el setter para la contraseña encriptada
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public TipoUsuario getTipo_Usuario() {
+        return tipo_Usuario;
+    }
+
+    public void setTipo_Usuario(TipoUsuario tipo_Usuario) {
+        this.tipo_Usuario = tipo_Usuario;
+    }
+
+    public String getPasswordEncriptada() {
+        return passwordEncriptada;
+    }
+
+
 }
 
 enum TipoUsuario {

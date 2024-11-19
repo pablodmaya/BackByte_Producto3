@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css"> <!-- Referencia al CSS externo -->
+</head>
+<body>
+<div class="login-container">
+    <h1>Login</h1>
+
+    <!-- Mensajes de error -->
+    <div class="error">
+        <!-- Si es necesario, aquí se puede incluir un mensaje dinámico -->
+    </div>
+
+    <!-- Formulario de inicio de sesión -->
+    <form method="POST" action="/login">
+        <!-- Campo de usuario -->
+        <label>
+            <input type="text" name="username" placeholder="Username" required>
+        </label>
+
+        <!-- Campo de contraseña -->
+        <label>
+            <input type="password" name="password" placeholder="Password" required>
+        </label>
+
+        <!-- Botón de login -->
+        <button type="submit">Login</button>
+    </form>
+</div>
+</body>
+</html>

@@ -15,6 +15,7 @@ public class SecurityConfig {
 
     private final UsuarioService usuarioService;
 
+    // Inyecta el UsuarioService, que implementa UserDetailsService
     public SecurityConfig(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
@@ -22,15 +23,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .and()
-                .logout().permitAll();
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/home", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("admin")
+                        .requestMatchers("/user/**").hasRole("user")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login").permitAll()
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home", true)
+                )
+                .logout()
+                .permitAll();
 
         return http.build();
     }
@@ -40,13 +45,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // Configuración de AuthenticationManager usando el AuthenticationManagerBuilder
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
-            throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(usuarioService)
-                .passwordEncoder(passwordEncoder)
-                .and()
-                .build();
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(usuarioService)
+                .passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
     }
 }
