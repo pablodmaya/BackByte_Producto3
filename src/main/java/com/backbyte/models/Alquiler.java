@@ -8,6 +8,46 @@ import java.util.Date;
 @Data
 @Entity
 public class Alquiler {
+    public Integer getId_Alquiler() {
+        return id_Alquiler;
+    }
+
+    public void setId_Alquiler(Integer id_Alquiler) {
+        this.id_Alquiler = id_Alquiler;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Date getFecha_Inicio() {
+        return fecha_Inicio;
+    }
+
+    public void setFecha_Inicio(Date fecha_Inicio) {
+        this.fecha_Inicio = fecha_Inicio;
+    }
+
+    public Date getFecha_Fin() {
+        return fecha_Fin;
+    }
+
+    public void setFecha_Fin(Date fecha_Fin) {
+        this.fecha_Fin = fecha_Fin;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_Alquiler;

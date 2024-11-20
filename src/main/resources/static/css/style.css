@@ -1,3 +1,10 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
 /* Reset de márgenes y padding */
 html, body {
     height: auto;

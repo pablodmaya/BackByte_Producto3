@@ -1,5 +1,6 @@
 package com.backbyte.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,5 +26,12 @@ public class Cliente {
 
     @Column(name = "telefono")
     private String telefono;
+
+    // Relación con Usuario
+    @OneToOne // Relación uno a uno (puede ser ManyToOne si varios clientes comparten usuario)
+    @JoinColumn(name = "id_Usuario", referencedColumnName = "id_Usuario", nullable = false)
+    @JsonIgnore
+    private Usuario usuario; // Representa la relación con la tabla Usuario
+
 
 }
