@@ -73,7 +73,7 @@ public class ReservasVehiculosController {
 
 
 
-        Long idUsuario = 1L; // Suponemos que el id_Usuario es 1L por ahora
+        Integer idUsuario = 1; // Suponemos que el id_Usuario es 1L por ahora
 
         // Verificar si el usuario ya es cliente
         Usuario usuario = UsuarioRepository.findById(idUsuario)
@@ -90,7 +90,7 @@ public class ReservasVehiculosController {
         }
 
         // Si el usuario es cliente, buscar el cliente asociado a ese usuario
-        Cliente clienteExistente = clienteRepository.findByUsuarioId(idUsuario);
+        Cliente clienteExistente = clienteRepository.findByUsuarioId(Long.valueOf(idUsuario));
         if (clienteExistente == null) {
             throw new RuntimeException("Cliente no encontrado para el usuario");
         }
@@ -132,7 +132,7 @@ public class ReservasVehiculosController {
         if (clienteExistente == null) {
 
                                          // esto habra que cambiarlo!! //
-            Usuario usuario = UsuarioRepository.findById(1L).orElseThrow(() -> new RuntimeException("Usuario no encontrado")); // en lugar de 1L habra que meter el id del usuario logeado //
+            Usuario usuario = UsuarioRepository.findById(1).orElseThrow(() -> new RuntimeException("Usuario no encontrado")); // en lugar de 1L habra que meter el id del usuario logeado //
                                          // esto habra que cambiarlo!! //
 
             usuario.setEs_Cliente(true);
