@@ -1,33 +1,37 @@
 package com.backbyte.service;
 
-import com.backbyte.repository.UsuarioRepository;
 import com.backbyte.models.Usuario;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.backbyte.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // Método para cargar el usuario por nombre de usuario
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByNombreUsuario(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    // Método para registrar un usuario
+    public Usuario registrarUsuario(Usuario usuario) {
+        if (usuarioRepository.findByNombreUsuario(usuario.getNombreUsuario()).isPresent()) {
+            throw new RuntimeException("El nombre de usuario ya está en uso.");
+        }
 
-        // Compara la contraseña proporcionada (en texto claro) con la contraseña encriptada de la base de datos
-        // Aquí se hace una validación implícita cuando Spring Security la usa
-        return new org.springframework.security.core.userdetails.User(
-                usuario.getNombreUsuario(),
-                usuario.getPasswordEncriptada(),  // Debe ser la contraseña encriptada
-                usuario.getAuthorities()
-        );
+        // Encriptar la contraseña proporcionada
+        usuario.setPasswordEncriptada(passwordEncoder.encode(usuario.getPassword()));
+
+        // Guardar el usuario en la base de datos
+        return usuarioRepository.save(usuario);
+    }
+
+    // Método de carga de usuarios existente para autenticación
+    public Usuario cargarUsuarioPorNombre(String username) {
+        return usuarioRepository.findByNombreUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
     }
 }

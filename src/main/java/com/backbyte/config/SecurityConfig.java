@@ -1,6 +1,5 @@
 package com.backbyte.config;
 
-import com.backbyte.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,14 +8,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 public class SecurityConfig {
 
-    private final UsuarioService usuarioService;
+    private final UserDetailsService usuarioService;
 
-    // Inyecta el UsuarioService, que implementa UserDetailsService
-    public SecurityConfig(UsuarioService usuarioService) {
+    public SecurityConfig(UserDetailsService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
@@ -24,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/home", "/css/**", "/js/**", "/images/**", "/registro").permitAll()
                         .requestMatchers("/admin/**").hasRole("admin")
                         .requestMatchers("/user/**").hasRole("user")
                         .anyRequest().authenticated()
@@ -34,8 +33,11 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                 )
-                .logout()
-                .permitAll();
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                );
 
         return http.build();
     }
@@ -45,13 +47,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Configuración de AuthenticationManager usando el AuthenticationManagerBuilder
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(usuarioService)
-                .passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
+        var authProvider = new org.springframework.security.authentication.dao.DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(usuarioService); // Explicitamente se usa UserDetailsService
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.authenticationProvider(authProvider);
+        return builder.build();
     }
 }
+
+

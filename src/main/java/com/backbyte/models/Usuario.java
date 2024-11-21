@@ -86,7 +86,7 @@ public class Usuario implements UserDetails {
     }
 
     public String getPasswordClear() {
-        return password;  // Método adicional para acceder a la contraseña sin encriptar (si es necesario en algún lugar)
+        return password;
     }
 
     public void setPassword(String password) {
@@ -118,9 +118,9 @@ public class Usuario implements UserDetails {
     }
 
 
+    public enum TipoUsuario {
+        admin,
+        user
+    }
 }
 
-enum TipoUsuario {
-    admin,
-    user
-}
