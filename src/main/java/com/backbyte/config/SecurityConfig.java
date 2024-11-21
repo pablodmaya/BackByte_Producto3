@@ -51,8 +51,12 @@ public class SecurityConfig {
                             }
                         })
                 )
+
                 .logout()
-                .logoutSuccessUrl("/login?logout") // Redirige al login tras cerrar sesión
+                .logoutUrl("/logout")  // URL para cerrar sesión
+                .logoutSuccessUrl("/home")  // Redirigir al login con parámetro de logout
+                .invalidateHttpSession(true)  // Invalida la sesión
+                .clearAuthentication(true)   // Elimina la autenticación
                 .permitAll();
 
         return http.build();

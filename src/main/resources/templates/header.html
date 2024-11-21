@@ -1,5 +1,5 @@
 <!-- src/main/resources/templates/header.html -->
-<header>
+<header xmlns:th="http://www.w3.org/1999/xhtml">
   <div class="navbar">
     <!-- Logo y nombre -->
     <div class="logo">
@@ -42,7 +42,7 @@
 </header>
 
 
-<headerUserLogged>
+<headerUserLogged xmlns:th="http://www.w3.org/1999/xhtml">
   <div class="navbar">
     <!-- Logo y nombre -->
     <div class="logo">
@@ -84,7 +84,7 @@
       <div class="dropdown-content">
         <a href="/madrid">Mi perfil</a>
         <a href="/barcelona">Mis reservas</a>
-        <a href="/home">Cerrar sesión</a>
+        <a th:href="@{/logout}">Cerrar sesión</a>
 
       </div>
     </div>
