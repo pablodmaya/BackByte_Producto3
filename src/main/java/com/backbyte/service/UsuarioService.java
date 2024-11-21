@@ -19,14 +19,14 @@ public class UsuarioService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Método necesario para cumplir con UserDetailsService
+    // Metodo necesario para cumplir con UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return usuarioRepository.findByNombreUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
 
-    // Método para registrar el usuario
+    // Metodo para registrar el usuario
     public Usuario registrarUsuario(Usuario usuario) {
         if (usuarioRepository.findByNombreUsuario(usuario.getNombreUsuario()).isPresent()) {
             throw new RuntimeException("El nombre de usuario ya está en uso.");
@@ -39,7 +39,7 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.save(usuario);
     }
 
-    // Método de carga de usuarios existente para autenticación
+    // Metodo de carga de usuarios existente para autenticación
     public Usuario cargarUsuarioPorNombre(String username) {
         return usuarioRepository.findByNombreUsuario(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
