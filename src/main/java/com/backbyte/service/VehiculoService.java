@@ -17,7 +17,7 @@ public class VehiculoService {
     @Autowired
     private VehiculoRepository vehiculoRepository;
 
-    // Método para obtener los vehículos con filtros dinámicos
+    // Metodo para obtener los vehículos con filtros dinámicos
     public List<Vehiculo> getVehiculos(String ciudad, String tipo, Double minPrecio, Double maxPrecio) {
         // Si no hay filtros, devolver todos los vehículos
         if (ciudad == null && tipo == null && minPrecio == null && maxPrecio == null) {
@@ -76,7 +76,7 @@ public class VehiculoService {
         return vehiculoRepository.findAll();
     }
 
-    // Método para obtener un vehículo por su ID
+    // Metodo para obtener un vehículo por su ID
     public Optional<Vehiculo> getVehiculoById(Integer id) {
         return vehiculoRepository.findById(Long.valueOf(id));
     }
@@ -85,7 +85,7 @@ public class VehiculoService {
         return vehiculoRepository.save(vehiculo);
     }
 
-    // Método para actualizar un vehículo existente
+    // Metodo para actualizar un vehículo existente
     public Vehiculo updateVehiculo(Integer id, Vehiculo vehiculoDetalles) {
         return vehiculoRepository.findById(Long.valueOf(id))
                 .map(vehiculo -> {
@@ -100,7 +100,7 @@ public class VehiculoService {
                 .orElseThrow(() -> new RuntimeException("Vehículo no encontrado con id: " + id));
     }
 
-    // Método para eliminar un vehículo
+    // Metodo para eliminar un vehículo
     public void deleteVehiculo(Integer id) {
         if (vehiculoRepository.existsById(Long.valueOf(id))) {
             vehiculoRepository.deleteById(Long.valueOf(id));
@@ -109,12 +109,12 @@ public class VehiculoService {
         }
     }
 
-    // Método para obtener las ciudades disponibles
+    // Metodo para obtener las ciudades disponibles
     public List<Ciudad> getCiudadesDisponibles() {
         return Arrays.asList(Ciudad.values());
     }
 
-    // Método para obtener los tipos de vehículo disponibles
+    // Metodo para obtener los tipos de vehículo disponibles
     public List<TipoVehiculo> getTiposVehiculoDisponibles() {
         return Arrays.asList(TipoVehiculo.values());
     }

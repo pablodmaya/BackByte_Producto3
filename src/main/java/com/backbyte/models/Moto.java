@@ -12,4 +12,7 @@ public class Moto extends Vehiculo {
       return cc;
    }
 
+   public void setCc(Integer cc) {
+      this.cc = cc;
+   }
 }
