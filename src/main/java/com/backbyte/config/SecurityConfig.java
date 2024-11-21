@@ -32,9 +32,27 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login").permitAll()
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler((request, response, authentication) -> {
+                            // Redirección según el rol
+                            boolean redirected = false;
+                            for (var authority : authentication.getAuthorities()) {
+                                if (authority.getAuthority().equals("ROLE_admin")) {
+                                    response.sendRedirect("/admin/home");
+                                    redirected = true;
+                                    break; // Salimos del bucle
+                                } else if (authority.getAuthority().equals("ROLE_user")) {
+                                    response.sendRedirect("/user/home");
+                                    redirected = true;
+                                    break; // Salimos del bucle
+                                }
+                            }
+                            if (!redirected) {
+                                response.sendRedirect("/home"); // Redirección por defecto
+                            }
+                        })
                 )
                 .logout()
+                .logoutSuccessUrl("/login?logout") // Redirige al login tras cerrar sesión
                 .permitAll();
 
         return http.build();

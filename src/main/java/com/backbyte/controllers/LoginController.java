@@ -16,11 +16,11 @@ public class LoginController {
 
     @GetMapping("/admin/home")
     public String adminHome() {
-        return "admin-home";  // Redirige a la página de inicio del admin
+        return "admin/adminHome";  // Redirige a la página de inicio del admin
     }
 
     @GetMapping("/user/home")
     public String userHome() {
-        return "user-home";  // Redirige a la página de inicio del usuario
+        return "user/userHome";  // Redirige a la página de inicio del usuario
     }
 }
