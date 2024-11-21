@@ -2,11 +2,14 @@ package com.backbyte.service;
 
 import com.backbyte.models.Usuario;
 import com.backbyte.repository.UsuarioRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -16,7 +19,14 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Método para registrar un usuario
+    // Método necesario para cumplir con UserDetailsService
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usuarioRepository.findByNombreUsuario(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    }
+
+    // Método para registrar el usuario
     public Usuario registrarUsuario(Usuario usuario) {
         if (usuarioRepository.findByNombreUsuario(usuario.getNombreUsuario()).isPresent()) {
             throw new RuntimeException("El nombre de usuario ya está en uso.");
@@ -35,3 +45,4 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
     }
 }
+
