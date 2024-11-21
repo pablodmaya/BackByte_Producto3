@@ -35,7 +35,7 @@ CREATE TABLE `alquiler` (
   KEY `alquiler_vehiculo_idx` (`id_Vehiculo`),
   CONSTRAINT `alquiler_cliente` FOREIGN KEY (`id_Cliente`) REFERENCES `cliente` (`id_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `alquiler_vehiculo` FOREIGN KEY (`id_Vehiculo`) REFERENCES `vehiculo` (`id_Vehiculo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,9 +82,11 @@ CREATE TABLE `cliente` (
   `dni` varchar(255) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `telefono` varchar(255) DEFAULT NULL,
-  `tipo_carnet` tinyint DEFAULT NULL,
-  PRIMARY KEY (`id_Cliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id_Usuario` int DEFAULT NULL,
+  PRIMARY KEY (`id_Cliente`),
+  KEY `usuario_cliente_idx` (`id_Usuario`),
+  CONSTRAINT `usuario_cliente` FOREIGN KEY (`id_Usuario`) REFERENCES `usuario` (`id_Usuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +95,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (5,'Marc','Belmonte','47966233G','Pompeu Fabra 14','656706663',4),(6,'Alejandro','Alonso','11122233A','Virgen de Guadalupe 11','630656860',2),(7,'Pablo','de Maya','99988877B','Rosario 12','666777888',1),(8,'Felix','Pasadas','44455566D','Dalí 13','666333222',3);
+INSERT INTO `cliente` VALUES (5,'Marc','Belmonte','47966233G','Pompeu Fabra 14','656706663',NULL),(6,'Alejandro','Alonso','11122233A','Virgen de Guadalupe 11','630656860',NULL),(7,'Pablo','de Maya','99988877B','Rosario 12','666777888',NULL),(8,'Felix','Pasadas','44455566D','Dalí 13','666333222',NULL);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,6 +152,37 @@ INSERT INTO `moto` VALUES (3,300),(4,1200),(9,600),(10,800),(28,250),(30,600),(3
 UNLOCK TABLES;
 
 --
+-- Table structure for table `usuario`
+--
+
+DROP TABLE IF EXISTS `usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `usuario` (
+  `id_Usuario` int NOT NULL AUTO_INCREMENT,
+  `nombre_Usuario` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `password_encriptada` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `tipo_Usuario` enum('admin','user') DEFAULT 'user',
+  `es_Cliente` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id_Usuario`),
+  UNIQUE KEY `unique_nombre_usuario` (`nombre_Usuario`),
+  UNIQUE KEY `unique_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuario`
+--
+
+LOCK TABLES `usuario` WRITE;
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` VALUES (1,'admin','admin','$2a$10$qpZvFwRu6TJbBcb2JJPr3uPDeTYCOEOGq5X0Atii5DXcKxM7Yu7s2','admin@admin.com','admin',1),(2,'user','user','$2a$10$XCfeTupwTGbzFyHlKUZP1.icUOWjWpQWDfbIZJWuguyUqolX2w5Ee','user@user.com','user',0);
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `vehiculo`
 --
 
@@ -174,7 +207,7 @@ CREATE TABLE `vehiculo` (
 
 LOCK TABLES `vehiculo` WRITE;
 /*!40000 ALTER TABLE `vehiculo` DISABLE KEYS */;
-INSERT INTO `vehiculo` VALUES (1,'Ford','Fiesta','1234AAA',25,'Madrid','Coche'),(2,'Kia','Ceed','2345BBB',30,'Barcelona','Coche'),(3,'Honda','CRF','3456CCC',18,'Bilbao','Moto'),(4,'Ducati','Multistrada','4567DDD',35,'Sevilla','Moto'),(5,'Dacia','Sandero','5678EEE',20,'Valencia','Coche'),(6,'Toyota','Corolla','6789FFF',22,'Madrid','Coche'),(7,'Renault','Clio','7890GGG',24,'Barcelona','Coche'),(8,'Peugeot','208','8901HHH',27,'Bilbao','Coche'),(9,'Yamaha','YZF','9012III',33,'Sevilla','Moto'),(10,'BMW','GS','0123JJJ',40,'Valencia','Moto'),(11,'Audi','A4','1234KKK',50,'Madrid','Coche'),(12,'Nissan','Qashqai','2345LLL',45,'Barcelona','Coche'),(13,'Mercedes','Clase A','3456MMM',60,'Bilbao','Coche'),(14,'Volkswagen','Golf','4567NNN',55,'Sevilla','Coche'),(15,'Mazda','CX-5','5678OOO',65,'Valencia','Coche'),(16,'Chevrolet','Spark','6789PPP',28,'Madrid','Coche'),(17,'Hyundai','i30','7890QQQ',30,'Barcelona','Coche'),(18,'Fiat','Punto','8901RRR',20,'Bilbao','Coche'),(19,'Opel','Astra','9012SSS',25,'Sevilla','Coche'),(20,'Hyundai','i30','1234KKK',26,'Madrid','Coche'),(21,'Mercedes','A-Class','2345LLL',40,'Barcelona','Coche'),(22,'Audi','A3','3456MMM',38,'Valencia','Coche'),(23,'BMW','1 Series','4567NNN',42,'Sevilla','Coche'),(24,'Peugeot','208','5678OOO',23,'Bilbao','Coche'),(25,'Nissan','Micra','6789PPP',19,'Madrid','Coche'),(26,'Mazda','3','7890QQQ',29,'Barcelona','Coche'),(27,'Citroën','C3','8901RRR',25,'Valencia','Coche'),(28,'Chevrolet','Spark','9012SSS',17,'Sevilla','Moto'),(29,'Fiat','500','0123TTT',15,'Bilbao','Coche'),(30,'Suzuki','Swift','1234UUU',22,'Madrid','Moto'),(31,'Subaru','Impreza','2345VVV',34,'Barcelona','Moto'),(32,'Jeep','Renegade','3456WWW',36,'Valencia','Moto'),(33,'Mini','Cooper','4567XXX',37,'Sevilla','Moto'),(34,'Tesla','Model 3','5678YYY',50,'Bilbao','Moto');
+INSERT INTO `vehiculo` VALUES (1,'Ford','Fiesta','1234AAA',25,'Madrid','Coche'),(2,'Kia','Ceed','2345BBB',30,'Barcelona','Coche'),(3,'Honda','CRF','3456CCC',18,'Bilbao','Moto'),(4,'Ducati','Multistrada','4567DDD',35,'Sevilla','Moto'),(5,'Dacia','Sandero','5678EEE',20,'Valencia','Coche'),(6,'Toyota','Corolla','6789FFF',22,'Madrid','Coche'),(7,'Renault','Clio','7890GGG',24,'Barcelona','Coche'),(8,'Peugeot','208','8901HHH',27,'Bilbao','Coche'),(9,'Yamaha','YZF','9012III',33,'Sevilla','Moto'),(10,'BMW','GS','0123JJJ',40,'Valencia','Moto'),(11,'Audi','A4','1234KKK',50,'Madrid','Coche'),(12,'Nissan','Qashqai','2345LLL',45,'Barcelona','Coche'),(13,'Mercedes','Clase A','3456MMM',60,'Bilbao','Coche'),(14,'Volkswagen','Golf','4567NNN',55,'Sevilla','Coche'),(15,'Mazda','CX-5','5678OOO',65,'Valencia','Coche'),(16,'Chevrolet','Spark','6789PPP',28,'Madrid','Coche'),(17,'Hyundai','i30','7890QQQ',30,'Barcelona','Coche'),(18,'Fiat','Punto','8901RRR',20,'Bilbao','Coche'),(19,'Opel','Astra','9012SSS',25,'Sevilla','Coche'),(20,'Hyundai','i30','1234KKK',26,'Madrid','Coche'),(21,'Mercedes','A-Class','2345LLL',40,'Barcelona','Coche'),(22,'Audi','A3','3456MMM',38,'Valencia','Coche'),(23,'BMW','1 Series','4567NNN',42,'Sevilla','Coche'),(24,'Peugeot','208','5678OOO',23,'Bilbao','Coche'),(25,'Nissan','Micra','6789PPP',19,'Madrid','Coche'),(26,'Mazda','3','7890QQQ',29,'Barcelona','Coche'),(27,'Citroën','C3','8901RRR',25,'Valencia','Coche'),(28,'Chevrolet','Spark','9012SSS',17,'Sevilla','Coche'),(29,'Fiat','500','0123TTT',15,'Bilbao','Coche'),(30,'Suzuki','Swift','1234UUU',22,'Madrid','Coche'),(31,'Subaru','Impreza','2345VVV',34,'Barcelona','Coche'),(32,'Jeep','Renegade','3456WWW',36,'Valencia','Coche'),(33,'Mini','Cooper','4567XXX',37,'Sevilla','Coche'),(34,'Tesla','Model 3','5678YYY',50,'Bilbao','Coche');
 /*!40000 ALTER TABLE `vehiculo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,4 +228,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-09 20:58:51
+-- Dump completed on 2024-11-21 22:01:30
