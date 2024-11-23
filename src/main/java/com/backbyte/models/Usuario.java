@@ -73,4 +73,48 @@ public class Usuario implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+    public Integer getId_Usuario() {
+        return id_Usuario;
+    }
+
+    public void setId_Usuario(Integer id_Usuario) {
+        this.id_Usuario = id_Usuario;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPasswordEncriptada() {
+        return passwordEncriptada;
+    }
+
+    public void setPasswordEncriptada(String passwordEncriptada) {
+        this.passwordEncriptada = passwordEncriptada;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public TipoUsuario getTipo_Usuario() {
+        return tipo_Usuario;
+    }
+
+    public void setTipo_Usuario(TipoUsuario tipo_Usuario) {
+        this.tipo_Usuario = tipo_Usuario;
+    }
 }
