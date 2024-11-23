@@ -49,10 +49,6 @@
     </div>
   </form>
 
-  <!-- Botón para añadir un nuevo vehículo -->
-  <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addVehicleModal">
-    Añadir Vehículo
-  </button>
 
   <!-- Listado de vehículos -->
   <table class="table table-bordered">
@@ -65,7 +61,6 @@
       <th>Localización</th>
       <th>Tipo</th>
       <th>Imagen</th>
-      <th>Acciones</th>
     </tr>
     </thead>
     <tbody>
@@ -79,16 +74,6 @@
         <td th:text="${vehiculo.tipoVehiculo}"></td>
         <td>
           <img th:src="@{'/images/Vehiculo/Vehiculo' + ${vehiculo.id_Vehiculo} + '.png'}" alt="Imagen del vehículo" style="width: 100px; height: auto; border-radius: 5px;">
-        </td>
-        <td>
-
-          <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editVehicleModal"
-                  th:attr="data-id=${vehiculo.id_Vehiculo}, data-marca=${vehiculo.marca}, data-modelo=${vehiculo.modelo}, data-matricula=${vehiculo.matricula}, data-precio=${vehiculo.precioDia}, data-localizacion=${vehiculo.localizacion}, data-tipo=${vehiculo.tipoVehiculo}">
-            Editar
-          </button>
-          <a th:href="@{/vehiculos/eliminar/{id}(id=${vehiculo.id_Vehiculo})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este vehículo?');">
-            Eliminar
-          </a>
         </td>
       </tr>
     </th:block>

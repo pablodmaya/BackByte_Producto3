@@ -18,7 +18,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @GetMapping("/clientes")
+    @GetMapping("/admin/clientes")
     public String listarClientes(Model model) {
         List<Cliente> clientes = clienteService.getClientes();  // Obtener todos los clientes mapeados a ClienteModel
         System.out.println("Número de clientes pasados a la vista: " + clientes.size());  // Verificar cuántos clientes se están pasando a la vista
