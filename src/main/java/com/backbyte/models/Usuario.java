@@ -37,6 +37,19 @@ public class Usuario implements UserDetails {
 
     @Column(name = "es_cliente")
     private Boolean es_Cliente;
+
+    public Usuario( String nombreUsuario, String password, String passwordEncriptada, String email, TipoUsuario tipo_Usuario, Boolean es_Cliente) {
+        this.nombreUsuario = nombreUsuario;
+        this.password = password;
+        this.email = email;
+        this.tipo_Usuario = tipo_Usuario;
+        this.es_Cliente = es_Cliente;
+    }
+
+    public Usuario() {
+
+    }
+
     // Métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -117,4 +130,5 @@ public class Usuario implements UserDetails {
     public void setTipo_Usuario(TipoUsuario tipo_Usuario) {
         this.tipo_Usuario = tipo_Usuario;
     }
+
 }

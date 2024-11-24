@@ -12,5 +12,8 @@ public class LoginController {
     public String login() {
         return "login";  // Muestra la vista del formulario de login
     }
-
+    @GetMapping("/registro")
+    public String registro() {
+        return "registro";  // Muestra la vista del formulario de registro
+    }
 }
