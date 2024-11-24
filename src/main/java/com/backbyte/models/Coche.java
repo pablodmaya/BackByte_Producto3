@@ -11,4 +11,27 @@ public class Coche extends Vehiculo {
     private String color;
     private Integer puertas;
 
+    public Integer getPlazas() {
+        return plazas;
+    }
+
+    public void setPlazas(Integer plazas) {
+        this.plazas = plazas;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public Integer getPuertas() {
+        return puertas;
+    }
+
+    public void setPuertas(Integer puertas) {
+        this.puertas = puertas;
+    }
 }
