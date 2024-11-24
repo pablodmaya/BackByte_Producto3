@@ -67,15 +67,10 @@
       <div class="auth-links">
         <a th:href="@{/user/vehiculos}">Listado de vehículos</a>
       </div>
-
-      <!-- Menú para "Nuestros clientes" -->
-      <div class="auth-links">
-        <a href="/clientes">Nuestros clientes</a>
-      </div>
     </div>
 
     <!-- Opciones de usuario logueado -->
-
+<!-- acabar de tocar con pablo -->
     <div class="dropdown">
       <button class="dropbtn">Usuario</button>
       <div class="dropdown-content">
@@ -98,41 +93,30 @@
 
     <div class="navbar-center">
       <div class="auth-links">
-        <a th:href="@{admin/home}">Inicio</a>
-      </div>
-
-      <!-- Menú desplegable para Ciudades -->
-      <div class="dropdown">
-        <button class="dropbtn">Nuestras sucursales</button>
-        <div class="dropdown-content">
-          <a th:href="@{admin/madrid}">Madrid</a>
-          <a th:href="@{admin/barcelona}">Barcelona</a>
-          <a th:href="@{admin/bilbao}">Bilbao</a>
-          <a th:href="@{admin/sevilla}">Sevilla</a>
-          <a th:href="@{admin/valencia}">Valencia</a>
-        </div>
+        <a th:href="@{/admin/home}">Inicio</a>
       </div>
 
       <!-- Menú para "Nuestros vehículos" -->
       <div class="auth-links">
-        <a href="/vehiculos">Nuestros vehículos</a>
+        <a th:href="@{/admin/vehiculos}">Vehículos</a>
       </div>
 
       <!-- Menú para "Nuestros clientes" -->
       <div class="auth-links">
-        <a href="/clientes">Nuestros clientes</a>
+        <a th:href="@{/admin/clientes}">Clientes</a>
+      </div>
+
+      <div class="auth-links">
+        <a th:href="@{/admin/reservas}">Reservas</a>
       </div>
     </div>
 
     <!-- Opciones de usuario logueado -->
 
     <div class="dropdown">
-      <button class="dropbtn">Usuario</button>
+      <button class="dropbtn">Admin</button>
       <div class="dropdown-content">
-        <a href="/madrid">Mi perfil</a>
-        <a href="/barcelona">Mis reservas</a>
         <a th:href="@{/logout}">Cerrar sesión</a>
-
       </div>
     </div>
   </div>

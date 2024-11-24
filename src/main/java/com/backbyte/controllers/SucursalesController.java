@@ -8,7 +8,7 @@ public class SucursalesController {
 
     @GetMapping("/madrid")
     public String madrid() {
-        return "city/madrid";  // Retorna la vista "madridAdmin.html"
+        return "city/madrid";
     }
 
     @GetMapping("/user/madrid")

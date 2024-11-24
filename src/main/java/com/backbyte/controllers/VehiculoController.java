@@ -12,14 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/user/vehiculos")
+@RequestMapping
 public class VehiculoController {
 
     @Autowired
     private VehiculoService vehiculoService;
 
-    // Ruta para mostrar todos los vehículos (GET /vehiculos)
-    @GetMapping
+    @GetMapping("/vehiculos")
     public String getVehiculos(@RequestParam(required = false) String ciudad,
                                @RequestParam(required = false) String tipo,
                                @RequestParam(required = false) Double minPrecio,
@@ -28,11 +27,37 @@ public class VehiculoController {
         model.addAttribute("vehiculos", vehiculoService.getVehiculos(ciudad, tipo, minPrecio, maxPrecio));
         model.addAttribute("ciudades", vehiculoService.getCiudadesDisponibles());
         model.addAttribute("tiposVehiculo", vehiculoService.getTiposVehiculoDisponibles());
-        return "vehiculos"; // Devuelve la plantilla Thymeleaf "vehiculos.html"
+        return "vehiculos";
     }
 
+    @GetMapping("/user/vehiculos")
+    public String getUserVehiculos(@RequestParam(required = false) String ciudad,
+                                   @RequestParam(required = false) String tipo,
+                                   @RequestParam(required = false) Double minPrecio,
+                                   @RequestParam(required = false) Double maxPrecio,
+                                   Model model) {
+        model.addAttribute("vehiculos", vehiculoService.getVehiculos(ciudad, tipo, minPrecio, maxPrecio));
+        model.addAttribute("ciudades", vehiculoService.getCiudadesDisponibles());
+        model.addAttribute("tiposVehiculo", vehiculoService.getTiposVehiculoDisponibles());
+        return "/user/userVehiculos"; // Devuelve la plantilla Thymeleaf "userVehiculos.html"
+    }
+
+
+    @GetMapping("/admin/vehiculos")
+    public String getAdminVehiculos(@RequestParam(required = false) String ciudad,
+                                    @RequestParam(required = false) String tipo,
+                                    @RequestParam(required = false) Double minPrecio,
+                                    @RequestParam(required = false) Double maxPrecio,
+                                    Model model) {
+        model.addAttribute("vehiculos", vehiculoService.getVehiculos(ciudad, tipo, minPrecio, maxPrecio));
+        model.addAttribute("ciudades", vehiculoService.getCiudadesDisponibles());
+        model.addAttribute("tiposVehiculo", vehiculoService.getTiposVehiculoDisponibles());
+        return "/admin/adminVehiculos"; // Devuelve la plantilla Thymeleaf "userVehiculos.html"
+    }
+
+
     // Ruta para añadir un nuevo vehículo (POST /vehiculos/agregar)
-    @PostMapping("/agregar")
+    @PostMapping("/vehiculos/agregar")
     public String addVehiculo(@RequestParam String marca,
                               @RequestParam String modelo,
                               @RequestParam String matricula,
@@ -66,11 +91,11 @@ public class VehiculoController {
         nuevoVehiculo.setTipoVehiculo(tipoVehiculo);
 
         vehiculoService.addVehiculo(nuevoVehiculo);
-        return "redirect:/vehiculos";
+        return "redirect:/admin/vehiculos";
     }
 
     // Ruta para editar un vehículo existente (POST /vehiculos/editar/{id})
-    @PostMapping("/editar/{id}")
+    @PostMapping("/vehiculos/editar/{id}")
     public String editVehiculo(@PathVariable Integer id,
                                @RequestParam String marca,
                                @RequestParam String modelo,
@@ -103,14 +128,14 @@ public class VehiculoController {
         }
 
         vehiculoService.updateVehiculo(id, vehiculoExistente);
-        return "redirect:/vehiculos";
+        return "redirect:/admin/vehiculos";
     }
 
 
     // Ruta para eliminar un vehículo (GET /vehiculos/eliminar/{id})
-    @GetMapping("/eliminar/{id}")
+    @GetMapping("/vehiculos/eliminar/{id}")
     public String deleteVehiculo(@PathVariable Integer id) {
         vehiculoService.deleteVehiculo(id);
-        return "redirect:/vehiculos";
+        return "redirect:/admin/vehiculos";
     }
 }
