@@ -9,13 +9,13 @@
 </head>
 <body class="vehiculo-page">
 <!-- Header -->
-<div th:replace="~{header :: header}"></div>
+<div th:replace="~{header :: headerUserLogged}"></div>
 
 <div class="container mt-5">
   <h1>Listado de Vehículos</h1>
 
   <!-- Formulario de filtrado -->
-  <form method="get" action="/vehiculos" class="mb-3">
+  <form method="get" action="/userVehiculos" class="mb-3">
     <div class="row g-3">
       <div class="col-md-3">
         <label for="ciudad" class="form-label">Ciudad:</label>
@@ -81,12 +81,10 @@
   </table>
 </div>
 
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
 <!-- Incluir el footer -->
-<div th:replace="footer :: footer"></div>
+<div th:replace="~{footer :: footer}"></div>
 
 <script src="/js/vehiculosCrud.js" defer></script>
 

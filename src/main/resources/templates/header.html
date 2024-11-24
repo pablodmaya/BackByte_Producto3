@@ -63,12 +63,7 @@
 <!-- EN NUESTROS VEHICULOS, EN LA PAGINA DE USUARIO (HAY QUE CREARLA) HACERLA SIMILAR SIN CRUD) -->
       <!-- Menú para "Nuestros vehículos" -->
       <div class="auth-links">
-        <a th:href="@{/user/vehiculos"}>Listado de vehículos</a>
-      </div>
-
-      <!-- Menú para "Nuestros clientes" -->
-      <div class="auth-links">
-        <a th:href="@{/user/clientes"}>Nuestros clientes</a>
+        <a th:href="@{/user/vehiculos}">Listado de vehículos</a>
       </div>
     </div>
 
@@ -77,7 +72,7 @@
     <div class="dropdown">
       <button class="dropbtn">Usuario</button>
       <div class="dropdown-content">
-        <a href="/perfil">Mi perfil</a>
+        <a th:href="@{/user/mis-reservas}">Mis reservas</a>
         <a th:href="@{/user/mis-reservas}">Mis reservas</a>
         <a th:href="@{/logout}">Cerrar sesión</a>
 
@@ -96,9 +91,8 @@
 
     <div class="navbar-center">
       <div class="auth-links">
-        <a th:href="@{admin/home}">Inicio</a>
+        <a th:href="@{/admin/home}">Inicio</a>
       </div>
-    </div>
 
       <!-- Menú para "Nuestros vehículos" -->
       <div class="auth-links">
@@ -107,11 +101,11 @@
 
       <!-- Menú para "Nuestros clientes" -->
       <div class="auth-links">
-        <a th:href="@{admin/clientes}">Clientes</a>
+        <a th:href="@{/admin/clientes}">Clientes</a>
       </div>
 
       <div class="auth-links">
-        <a th:href="@{admin/reservas}">Reservas</a>
+        <a th:href="@{/admin/reservas}">Reservas</a>
       </div>
     </div>
 
