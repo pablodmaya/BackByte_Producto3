@@ -36,8 +36,6 @@
                     <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                             data-bs-target="#editReservationModal"
                             th:attr="data-id=${reserva.id_Alquiler},
-                                     data-cliente=${reserva.cliente.id_Cliente},
-                                     data-vehiculo=${reserva.vehiculo.id_Vehiculo},
                                      data-fechainicio=${reserva.fecha_Inicio},
                                      data-fechafin=${reserva.fecha_Fin}">
                         Editar
@@ -54,6 +52,7 @@
     </table>
 </div>
 
+<!-- Modal para editar reserva -->
 <div class="modal fade" id="editReservationModal" tabindex="-1" aria-labelledby="editReservationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -64,22 +63,12 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id" id="editReservaId">
-                    <div class="mb-3">
-                        <label for="editCliente" class="form-label">Cliente</label>
-                        <select class="form-select" name="clienteId" id="editCliente" required>
-                            <option th:each="cliente : ${clientes}" th:value="${cliente.id_Cliente}" th:text="${cliente.nombre + ' ' + cliente.apellido}"></option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editVehiculo" class="form-label">Vehículo</label>
-                        <select class="form-select" name="vehiculoId" id="editVehiculo" required>
-                            <option th:each="vehiculo : ${vehiculos}" th:value="${vehiculo.id_Vehiculo}" th:text="${vehiculo.marca + ' ' + vehiculo.modelo}"></option>
-                        </select>
-                    </div>
+                    <!-- Fecha de Inicio -->
                     <div class="mb-3">
                         <label for="editFechaInicio" class="form-label">Fecha de Inicio</label>
                         <input type="date" class="form-control" name="fechaInicio" id="editFechaInicio" required>
                     </div>
+                    <!-- Fecha de Fin -->
                     <div class="mb-3">
                         <label for="editFechaFin" class="form-label">Fecha de Fin</label>
                         <input type="date" class="form-control" name="fechaFin" id="editFechaFin" required>

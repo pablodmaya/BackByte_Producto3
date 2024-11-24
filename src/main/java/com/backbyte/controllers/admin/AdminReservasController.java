@@ -2,8 +2,6 @@ package com.backbyte.controllers.admin;
 
 import com.backbyte.models.Alquiler;
 import com.backbyte.repository.AlquilerRepository;
-import com.backbyte.repository.ClienteRepository;
-import com.backbyte.repository.VehiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +16,6 @@ public class AdminReservasController {
 
     @Autowired
     private AlquilerRepository alquilerRepository;
-
-    @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private VehiculoRepository vehiculoRepository;
 
     // Listar reservas con filtrado
     @GetMapping
@@ -61,37 +53,25 @@ public class AdminReservasController {
         }
 
         model.addAttribute("reservas", reservas);
-        model.addAttribute("clientes", clienteRepository.findAll());
-        model.addAttribute("vehiculos", vehiculoRepository.findAll());
         return "admin/adminReservas";
     }
 
-    // Editar una reserva
+    // Editar una reserva (solo fechas)
     @PostMapping("/editar")
-    public String editarReserva(
-            @RequestParam Long id,
-            @RequestParam Long clienteId,
-            @RequestParam Long vehiculoId,
-            @RequestParam String fechaInicio,
-            @RequestParam String fechaFin,
-            Model model) {
+    public String editarReserva(@RequestParam Long id,
+                                @RequestParam String fechaInicio,
+                                @RequestParam String fechaFin) {
 
         try {
-            Alquiler reserva = alquilerRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+            Alquiler reservaExistente = alquilerRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Reserva no encontrada con ID: " + id));
 
-            reserva.setCliente(clienteRepository.findById(clienteId)
-                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado")));
-            reserva.setVehiculo(vehiculoRepository.findById(vehiculoId)
-                    .orElseThrow(() -> new RuntimeException("Vehículo no encontrado")));
-            reserva.setFecha_Inicio(Date.valueOf(fechaInicio));
-            reserva.setFecha_Fin(Date.valueOf(fechaFin));
+            reservaExistente.setFecha_Inicio(Date.valueOf(fechaInicio));
+            reservaExistente.setFecha_Fin(Date.valueOf(fechaFin));
 
-            alquilerRepository.save(reserva);
-
-            model.addAttribute("mensaje", "Reserva actualizada exitosamente.");
+            alquilerRepository.save(reservaExistente);
         } catch (Exception e) {
-            model.addAttribute("error", "Error al actualizar la reserva: " + e.getMessage());
+            throw new RuntimeException("Error al actualizar la reserva: " + e.getMessage());
         }
 
         return "redirect:/admin/reservas";
