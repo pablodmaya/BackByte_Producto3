@@ -66,4 +66,8 @@ public class Alquiler {
     @Column(name = "fecha_fin")
     private Date fecha_Fin;
 
+    @Transient // Si no quieres persistir este campo en la base de datos
+    private Double precioTotal;
+
+
 }

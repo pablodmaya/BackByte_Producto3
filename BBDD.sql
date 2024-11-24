@@ -35,7 +35,7 @@ CREATE TABLE `alquiler` (
   KEY `alquiler_vehiculo_idx` (`id_Vehiculo`),
   CONSTRAINT `alquiler_cliente` FOREIGN KEY (`id_Cliente`) REFERENCES `cliente` (`id_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `alquiler_vehiculo` FOREIGN KEY (`id_Vehiculo`) REFERENCES `vehiculo` (`id_Vehiculo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,8 +85,8 @@ CREATE TABLE `cliente` (
   `id_Usuario` int DEFAULT NULL,
   PRIMARY KEY (`id_Cliente`),
   KEY `usuario_cliente_idx` (`id_Usuario`),
-  CONSTRAINT `usuario_cliente` FOREIGN KEY (`id_Usuario`) REFERENCES `usuario` (`id_Usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `usuario_cliente` FOREIGN KEY (`id_Usuario`) REFERENCES `usuario` (`id_Usuario`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +169,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`id_Usuario`),
   UNIQUE KEY `unique_nombre_usuario` (`nombre_Usuario`),
   UNIQUE KEY `unique_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'admin','admin','$2a$10$qpZvFwRu6TJbBcb2JJPr3uPDeTYCOEOGq5X0Atii5DXcKxM7Yu7s2','admin@admin.com','admin',1),(2,'user','user','$2a$10$XCfeTupwTGbzFyHlKUZP1.icUOWjWpQWDfbIZJWuguyUqolX2w5Ee','user@user.com','user',0);
+INSERT INTO `usuario` VALUES (1,'admin','admin','$2a$10$qpZvFwRu6TJbBcb2JJPr3uPDeTYCOEOGq5X0Atii5DXcKxM7Yu7s2','admin@admin.com','admin',1),(2,'user','user','$2a$10$XCfeTupwTGbzFyHlKUZP1.icUOWjWpQWDfbIZJWuguyUqolX2w5Ee','user@user.com','user',1);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,4 +228,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-21 22:01:30
+-- Dump completed on 2024-11-24 22:30:19

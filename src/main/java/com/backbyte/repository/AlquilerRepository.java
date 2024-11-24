@@ -6,16 +6,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
 public interface AlquilerRepository extends JpaRepository<Alquiler, Long> {
-    // Métodos personalizados si los necesitas
-    @Query("SELECT a FROM Alquiler a WHERE a.cliente.id = :idCliente")
+
+    // Obtener todas las reservas de un cliente específico
+    @Query("SELECT a FROM Alquiler a WHERE a.cliente.id_Cliente = :idCliente")
     List<Alquiler> findByClienteId(@Param("idCliente") Long idCliente);
 
-
-    // Este query me da el precio total de el alquiler (multiplica los dias de reserva por el precio por dia del vehiculo) //
+    // Calcular el precio total por reserva (días reservados * precio por día del vehículo)
     @Query(value = """
     SELECT 
         DATEDIFF(a.fecha_fin, a.fecha_inicio) * v.precio_dia AS precio_total
@@ -27,4 +28,14 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long> {
         a.id_Cliente = :idCliente
     """, nativeQuery = true)
     List<Double> calcularPrecioTotalPorReserva(@Param("idCliente") Long idCliente);
+
+    // Filtrar reservas por cliente y/o fechas
+    @Query("SELECT a FROM Alquiler a WHERE " +
+            "(:clienteId IS NULL OR a.cliente.id_Cliente = :clienteId) AND " +
+            "(:fechaInicio IS NULL OR a.fecha_Inicio >= :fechaInicio) AND " +
+            "(:fechaFin IS NULL OR a.fecha_Fin <= :fechaFin)")
+    List<Alquiler> findByCriteria(
+            @Param("clienteId") Long clienteId,
+            @Param("fechaInicio") Date fechaInicio,
+            @Param("fechaFin") Date fechaFin);
 }

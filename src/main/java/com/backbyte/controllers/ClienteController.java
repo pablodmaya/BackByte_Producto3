@@ -1,7 +1,8 @@
 package com.backbyte.controllers;
 
-import com.backbyte.models.*;
+import com.backbyte.models.Cliente;
 import com.backbyte.service.ClienteService;
+import com.backbyte.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,16 +19,14 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping("/admin/clientes")
     public String listarClientes(Model model) {
-        List<Cliente> clientes = clienteService.getClientes();  // Obtener todos los clientes mapeados a ClienteModel
-        System.out.println("Número de clientes pasados a la vista: " + clientes.size());  // Verificar cuántos clientes se están pasando a la vista
-        System.out.println("Clientes recuperados: ");
-        clientes.forEach(cliente -> System.out.println(cliente));  // Imprimimos cada cliente en consola
-
-
-        model.addAttribute("clientes", clientes);  // Agrega los clientes al modelo para pasarlos a la vista
-        return "clientes";  // Retorna la vista 'clientes/list'
+        List<Cliente> clientes = clienteService.getClientes();
+        model.addAttribute("clientes", clientes);
+        return "clientes";
     }
 
     @PostMapping("/clientes/agregar")
@@ -44,7 +43,7 @@ public class ClienteController {
         nuevoCliente.setTelefono(telefono);
 
         clienteService.addCliente(nuevoCliente);
-        return "redirect:/clientes";
+        return "redirect:/admin/clientes";
     }
 
     @PostMapping("/clientes/editar/{id}")
@@ -57,7 +56,6 @@ public class ClienteController {
         Cliente clienteExistente = clienteService.getClienteById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
 
-        // Asignar nuevos valores al cliente existente
         clienteExistente.setNombre(nombre);
         clienteExistente.setApellido(apellido);
         clienteExistente.setDni(dni);
@@ -65,14 +63,22 @@ public class ClienteController {
         clienteExistente.setTelefono(telefono);
 
         clienteService.updateCliente(id, clienteExistente);
-        return "redirect:/clientes";
+        return "redirect:/admin/clientes";
     }
-
 
     @GetMapping("/clientes/eliminar/{id}")
     public String deleteCliente(@PathVariable Integer id) {
-        clienteService.deleteCliente(id);
-        return "redirect:/clientes";
-    }
+        Cliente cliente = clienteService.getClienteById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
 
+        // Eliminar el usuario asociado al cliente
+        if (cliente.getUsuario() != null) {
+            usuarioService.deleteUsuario(cliente.getUsuario().getId_Usuario());
+        }
+
+        // Eliminar el cliente
+        clienteService.deleteCliente(id);
+
+        return "redirect:/admin/clientes";
+    }
 }

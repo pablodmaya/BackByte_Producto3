@@ -20,9 +20,9 @@
     <div class="main-image">
         <form class="search-form">
             <p>Menú de Administración:</p>
-            <button onclick="/admin/vehiculos">Gestión de Vehiculos</button>
-            <button href=" ">Gestión de Clientes</button>
-            <button href=" ">Gestión de Reservas</button>
+            <a th:href="@{/admin/vehiculos}" class="btn">Gestión de Vehiculos</a>
+            <a th:href="@{/admin/clientes}" class="btn">Gestión de Clientes</a>
+            <a th:href="@{/admin/reservas}" class="btn">Gestión de Reservas</a>
         </form>
     </div>
 
