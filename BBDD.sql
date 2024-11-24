@@ -35,7 +35,7 @@ CREATE TABLE `alquiler` (
   KEY `alquiler_vehiculo_idx` (`id_Vehiculo`),
   CONSTRAINT `alquiler_cliente` FOREIGN KEY (`id_Cliente`) REFERENCES `cliente` (`id_Cliente`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `alquiler_vehiculo` FOREIGN KEY (`id_Vehiculo`) REFERENCES `vehiculo` (`id_Vehiculo`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (5,'Marc','Belmonte','47966233G','Pompeu Fabra 14','656706663',NULL),(6,'Alejandro','Alonso','11122233A','Virgen de Guadalupe 11','630656860',NULL),(7,'Pablo','de Maya','99988877B','Rosario 12','666777888',NULL),(8,'Felix','Pasadas','44455566D','Dalí 13','666333222',NULL);
+INSERT INTO `cliente` VALUES (5,'Marc','Belmonte','47966233G','Pompeu Fabra 14','656706663',NULL),(6,'Alejandro','Alonso','11122233A','Virgen de Guadalupe 11','630656860',NULL),(7,'Pablo','de Maya','99988877B','Rosario 12','666777888',NULL),(8,'Felix','Pasadas','44455566D','Dalí 13','666333222',NULL),(9,'user','user','111222333A','user','111222333',2);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,4 +228,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-24 22:30:19
+-- Dump completed on 2024-11-24 22:49:06
