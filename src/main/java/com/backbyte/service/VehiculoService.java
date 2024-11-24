@@ -17,7 +17,7 @@ public class VehiculoService {
     @Autowired
     private VehiculoRepository vehiculoRepository;
 
-    // Método para obtener los vehículos con filtros dinámicos
+    // Metodo para obtener los vehículos con filtros dinámicos
     public List<Vehiculo> getVehiculos(String ciudad, String tipo, Double minPrecio, Double maxPrecio) {
         // Si no hay filtros, devolver todos los vehículos
         if (ciudad == null && tipo == null && minPrecio == null && maxPrecio == null) {
@@ -76,6 +76,63 @@ public class VehiculoService {
         return vehiculoRepository.findAll();
     }
 
+    public List<Vehiculo> getUserVehiculos(String ciudad, String tipo, Double minPrecio, Double maxPrecio) {
+        // Si no hay filtros, devolver todos los vehículos
+        if (ciudad == null && tipo == null && minPrecio == null && maxPrecio == null) {
+            return vehiculoRepository.findAll();
+        }
+
+        // Convertir la ciudad y el tipo de vehículo si no son nulos
+        Ciudad ciudadEnum = null;
+        TipoVehiculo tipoVehiculoEnum = null;
+
+        if (ciudad != null && !ciudad.isEmpty()) {
+            try {
+                ciudadEnum = Ciudad.valueOf(ciudad);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Valor de ciudad no válido: " + ciudad, e);
+            }
+        }
+
+        if (tipo != null && !tipo.isEmpty()) {
+            try {
+                tipoVehiculoEnum = TipoVehiculo.valueOf(tipo);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Valor de tipo de vehículo no válido: " + tipo, e);
+            }
+        }
+
+        // Aplicar lógica de filtros
+        if (ciudadEnum != null && tipoVehiculoEnum != null && minPrecio != null && maxPrecio != null) {
+            return vehiculoRepository.findByLocalizacionAndTipoVehiculoAndPrecioDiaBetween(ciudadEnum, tipoVehiculoEnum, minPrecio, maxPrecio);
+        }
+
+        if (ciudadEnum != null && tipoVehiculoEnum != null) {
+            return vehiculoRepository.findByLocalizacionAndTipoVehiculo(ciudadEnum, tipoVehiculoEnum);
+        }
+
+        if (minPrecio != null && maxPrecio != null) {
+            return vehiculoRepository.findByPrecioDiaBetween(minPrecio, maxPrecio);
+        }
+
+        if (ciudadEnum != null) {
+            return vehiculoRepository.findByLocalizacion(ciudadEnum);
+        }
+
+        if (tipoVehiculoEnum != null) {
+            return vehiculoRepository.findByTipoVehiculo(tipoVehiculoEnum);
+        }
+
+        if (minPrecio != null) {
+            return vehiculoRepository.findByPrecioDiaGreaterThanEqual(minPrecio);
+        }
+
+        if (maxPrecio != null) {
+            return vehiculoRepository.findByPrecioDiaLessThanEqual(maxPrecio);
+        }
+
+        return vehiculoRepository.findAll();
+    }
 
     public List<Vehiculo> getAdminVehiculos(String ciudad, String tipo, Double minPrecio, Double maxPrecio) {
         // Si no hay filtros, devolver todos los vehículos
@@ -135,7 +192,7 @@ public class VehiculoService {
         return vehiculoRepository.findAll();
     }
 
-    // Método para obtener un vehículo por su ID
+    // Metodo para obtener un vehículo por su ID
     public Optional<Vehiculo> getVehiculoById(Integer id) {
         return vehiculoRepository.findById(Long.valueOf(id));
     }
