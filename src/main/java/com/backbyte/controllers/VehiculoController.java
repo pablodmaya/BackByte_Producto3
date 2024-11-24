@@ -12,14 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/vehiculos")
+@RequestMapping
 public class VehiculoController {
 
     @Autowired
     private VehiculoService vehiculoService;
-
-    // Ruta para mostrar todos los vehículos (GET /vehiculos)
-    @GetMapping
+    @GetMapping("/vehiculos")
     public String getVehiculos(@RequestParam(required = false) String ciudad,
                                @RequestParam(required = false) String tipo,
                                @RequestParam(required = false) Double minPrecio,
@@ -29,6 +27,19 @@ public class VehiculoController {
         model.addAttribute("ciudades", vehiculoService.getCiudadesDisponibles());
         model.addAttribute("tiposVehiculo", vehiculoService.getTiposVehiculoDisponibles());
         return "vehiculos"; // Devuelve la plantilla Thymeleaf "vehiculos.html"
+    }
+    // Ruta para mostrar todos los vehículos (GET /vehiculos)
+
+    @GetMapping("/admin/vehiculos")
+    public String getAdminVehiculos(@RequestParam(required = false) String ciudad,
+                               @RequestParam(required = false) String tipo,
+                               @RequestParam(required = false) Double minPrecio,
+                               @RequestParam(required = false) Double maxPrecio,
+                               Model model) {
+        model.addAttribute("vehiculos", vehiculoService.getVehiculos(ciudad, tipo, minPrecio, maxPrecio));
+        model.addAttribute("ciudades", vehiculoService.getCiudadesDisponibles());
+        model.addAttribute("tiposVehiculo", vehiculoService.getTiposVehiculoDisponibles());
+        return "/admin/adminVehiculos"; // Devuelve la plantilla Thymeleaf "vehiculos.html"
     }
 
     // Ruta para añadir un nuevo vehículo (POST /vehiculos/agregar)
@@ -66,7 +77,7 @@ public class VehiculoController {
         nuevoVehiculo.setTipoVehiculo(tipoVehiculo);
 
         vehiculoService.addVehiculo(nuevoVehiculo);
-        return "redirect:/vehiculos";
+        return "redirect:/admin/adminVehiculos";
     }
 
     // Ruta para editar un vehículo existente (POST /vehiculos/editar/{id})

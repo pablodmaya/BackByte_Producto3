@@ -63,12 +63,12 @@
 <!-- EN NUESTROS VEHICULOS, EN LA PAGINA DE USUARIO (HAY QUE CREARLA) HACERLA SIMILAR SIN CRUD) -->
       <!-- Menú para "Nuestros vehículos" -->
       <div class="auth-links">
-        <a href="/vehiculos">Listado de vehículos</a>
+        <a th:href="@{/user/vehiculos"}>Listado de vehículos</a>
       </div>
 
       <!-- Menú para "Nuestros clientes" -->
       <div class="auth-links">
-        <a href="/clientes">Nuestros clientes</a>
+        <a th:href="@{/user/clientes"}>Nuestros clientes</a>
       </div>
     </div>
 
@@ -102,16 +102,16 @@
 
       <!-- Menú para "Nuestros vehículos" -->
       <div class="auth-links">
-        <a href="/admin/vehiculos">Vehículos</a>
+        <a th:href="@{/admin/vehiculos}">Vehículos</a>
       </div>
 
       <!-- Menú para "Nuestros clientes" -->
       <div class="auth-links">
-        <a href="/admin/clientes">Clientes</a>
+        <a th:href="@{admin/clientes}">Clientes</a>
       </div>
 
       <div class="auth-links">
-        <a href="/admin/reservas">Reservas</a>
+        <a th:href="@{admin/reservas}">Reservas</a>
       </div>
     </div>
 
