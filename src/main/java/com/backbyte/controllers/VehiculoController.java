@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/vehiculos")
+@RequestMapping("/user/vehiculos")
 public class VehiculoController {
 
     @Autowired
