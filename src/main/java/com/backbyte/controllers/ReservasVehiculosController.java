@@ -6,14 +6,13 @@ import com.backbyte.repository.ClienteRepository;
 import com.backbyte.repository.UsuarioRepository;
 import com.backbyte.repository.VehiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Controller
@@ -32,7 +31,7 @@ public class ReservasVehiculosController {
     @Autowired
     private UsuarioRepository UsuarioRepository;
 
-    @GetMapping("/buscar-vehiculos")
+    @GetMapping("/user/buscar-vehiculos")
     public String buscarVehiculos(@RequestParam("vehicleType") String vehicleType,
                                   @RequestParam("pickupLocation") String pickupLocation,
                                   @RequestParam("startDate") String startDate,
@@ -62,31 +61,36 @@ public class ReservasVehiculosController {
         model.addAttribute("endDate", endDate);
 
         // En el futuro, puedes usar estos parámetros para filtrar datos
-        return "BuscarVehiculos";
+        return "/user/buscarVehiculos";
     }
 
-    @GetMapping("/reservar/{idVehiculo}")
+    @GetMapping("/user/reservar/{idVehiculo}")
     public String mostrarFormularioReserva(@PathVariable("idVehiculo") Integer idVehiculo,
                                            @RequestParam("startDate") String startDate,
                                            @RequestParam("endDate") String endDate,
                                            Model model) {
 
+// Obtener el nombre de usuario del contexto de seguridad
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Nombre de usuario del usuario autenticado
 
 
-        Integer idUsuario = 1; // Suponemos que el id_Usuario es 1L por ahora
 
         // Verificar si el usuario ya es cliente
-        Usuario usuario = UsuarioRepository.findById(idUsuario)
+        Usuario usuario = UsuarioRepository.findByNombreUsuario(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        // Obtener el ID del usuario autenticado
+        Integer idUsuario = usuario.getId_Usuario();
+
         // Comprobar si el usuario es cliente (es_cliente = 1)
-        if (usuario.getEs_Cliente() == false) {
+        if (!usuario.getEs_Cliente()) {
 
             model.addAttribute("idVehiculo", idVehiculo);
             model.addAttribute("startDate", startDate);
             model.addAttribute("endDate", endDate);
             // Si el usuario no es cliente, redirigimos al formulario de cliente
-            return "formularioReserva"; // Ruta del formulario para registrar al cliente
+            return "/user/formularioReserva"; // Ruta del formulario para registrar al cliente
         }
 
         // Si el usuario es cliente, buscar el cliente asociado a ese usuario
@@ -117,23 +121,30 @@ public class ReservasVehiculosController {
         alquilerRepository.save(alquiler);
 
 
-        return "redirect:/reservaConfirmada?idCliente=" + clienteExistente.getId_Cliente();
+        return "redirect:/user/reservaConfirmada?idCliente=" + clienteExistente.getId_Cliente();
     }
 
-    @PostMapping("/registrarClienteReserva")
+    @PostMapping("/user/registrarClienteReserva")
     public String registrarClienteYAlquiler(@ModelAttribute Cliente cliente, @RequestParam Long idVehiculo, @RequestParam String startDate,
                                             @RequestParam String endDate) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Nombre de usuario del usuario autenticado
 
+
+
+        // Verificar si el usuario ya es cliente
+        Usuario usuario = UsuarioRepository.findByNombreUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtener el ID del usuario autenticado
+        Integer idUsuario = usuario.getId_Usuario();
         // Verificar si el cliente ya existe
         Cliente clienteExistente = clienteRepository.findBydni(cliente.getDni());
 
 
         if (clienteExistente == null) {
 
-                                         // esto habra que cambiarlo!! //
-            Usuario usuario = UsuarioRepository.findById(1).orElseThrow(() -> new RuntimeException("Usuario no encontrado")); // en lugar de 1L habra que meter el id del usuario logeado //
-                                         // esto habra que cambiarlo!! //
 
             usuario.setEs_Cliente(true);
             UsuarioRepository.save(usuario);
@@ -160,37 +171,42 @@ public class ReservasVehiculosController {
         alquilerRepository.save(alquiler);
 
         // Redirigir a la página de confirmación
-        return "redirect:/reservaConfirmada?idCliente=" + clienteExistente.getId_Cliente();
+        return "redirect:/user/reservaConfirmada?idCliente=" + clienteExistente.getId_Cliente();
     }
 
-    @GetMapping("/reservaConfirmada")
+    @GetMapping("/user/reservaConfirmada")
     public String mostrarReservaConfirmada(@RequestParam Long idCliente, Model model) {
         // Puedes agregar datos al modelo si es necesario, por ejemplo:
         model.addAttribute("mensaje", "Tu reserva ha sido confirmada exitosamente.");
         model.addAttribute("idCliente", idCliente);
 
         // Retorna la vista reservaConfirmada.html
-        return "reservaConfirmada";
+        return "user/reservaConfirmada";
     }
 
-    @GetMapping("/mis-reservas/{idCliente}")
-    public String mostrarReservas(@PathVariable("idCliente") Long idCliente, @RequestParam(value = "success", required = false) String success,
-                                  Model model) {
+    @GetMapping("/user/mis-reservas")
+    public String mostrarReservas(Model model, String success) {
 
-                                  // ESTO HABRA QUE CAMBIARLO !! //
-        Long idUsuario = 1L; // Supongamos que el usuario logueado tiene el ID 1.
-                                  // ESTO HABRA QUE CAMBIARLO !! //
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Nombre de usuario del usuario autenticado
 
-        List<Double> preciosTotales = alquilerRepository.calcularPrecioTotalPorReserva(idCliente);
+
+
+        // Verificar si el usuario ya es cliente
+        Usuario usuario = UsuarioRepository.findByNombreUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtener el ID del usuario autenticado
+        Integer idUsuario = usuario.getId_Usuario();
+
+        Cliente cliente = clienteRepository.findByUsuarioId(Long.valueOf(idUsuario));
+        Integer idCliente = cliente.getId_Cliente();
+
+        List<Double> preciosTotales = alquilerRepository.calcularPrecioTotalPorReserva(Long.valueOf(idCliente));
 
         // Agregar los precios al modelo para pasarlos a la vista
         model.addAttribute("preciosTotales", preciosTotales);
 
-        // Buscar cliente asociado al usuario
-        Cliente cliente = clienteRepository.findByUsuarioId(idUsuario);
-        if (cliente == null) {
-            throw new RuntimeException("No se encontró un cliente asociado al usuario.");
-        }
 
         // Buscar alquileres asociados al cliente
         List<Alquiler> alquileres = alquilerRepository.findByClienteId(cliente.getId_Cliente().longValue());
@@ -199,16 +215,17 @@ public class ReservasVehiculosController {
         // Pasar los datos al modelo
         model.addAttribute("alquileres", alquileres);
 
-        // Agregar mensaje de éxito si existe
+//         Agregar mensaje de éxito si existe
         if ("true".equals(success)) {
             model.addAttribute("mensajeExito", "Reserva eliminada exitosamente.");
         }
 
-        return "misReservas";
+        return "user/misReservas";
     }
 
-    @GetMapping("/eliminarReserva/{id}")
-    public String eliminarReserva(@PathVariable Long id, @RequestParam Long idCliente) {
+    @GetMapping("/user/eliminarReserva/{id}")
+    public String eliminarReserva(@PathVariable Long id ) {
+
         // Buscar el alquiler por su ID
         Alquiler alquiler = alquilerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
@@ -217,7 +234,7 @@ public class ReservasVehiculosController {
         alquilerRepository.delete(alquiler);
 
 
-        return "redirect:/mis-reservas/" + idCliente + "?success=true";
+        return "redirect:/user/mis-reservas" + "?success=true";
     }
 
 

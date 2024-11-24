@@ -22,5 +22,16 @@ public class HomeController {
         return "home";  // Esta es la vista home.html
     }
 
+    @GetMapping("/admin/home")
+    public String adminHome(Model model) {
+        model.addAttribute("ciudades", Ciudad.values()); // Pasamos las opciones del enum al modelo
+        return "admin/adminHome";  // Redirige a la página de inicio del admin
+    }
+
+    @GetMapping("/user/home")
+    public String userHome(Model model) {
+        model.addAttribute("ciudades", Ciudad.values()); // Pasamos las opciones del enum al modelo
+        return "user/userHome";  // Redirige a la página de inicio del usuario
+    }
 
 }

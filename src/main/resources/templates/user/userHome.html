@@ -18,14 +18,17 @@
 
   <!-- Main Image Section -->
   <div class="main-image">
-    <form class="search-form">
+
+    <form class="search-form" action="/user/buscar-vehiculos" method="GET">
       <!-- Fila 1: Selección de tipo de vehículo -->
       <div class="vehicle-type">
-        <input type="radio" id="car" name="vehicleType" value="car" checked>
+        <input type="radio" id="car" name="vehicleType" value="Coche" checked>
         <label for="car">Coche</label>
-        <input type="radio" id="motorcycle" name="vehicleType" value="motorcycle">
+        <input type="radio" id="motorcycle" name="vehicleType" value="Moto">
         <label for="motorcycle">Moto</label>
       </div>
+
+
 
       <!-- Fila 2: Lugar de recogida y destino -->
       <div class="row">

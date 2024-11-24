@@ -5,36 +5,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sucursal Sevilla</title>
+    <title>Sucursal Valencia</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/css/city.css"> <!-- Estilo específico de Sevilla -->
+    <link rel="stylesheet" type="text/css" href="/css/city.css"> <!-- Estilo específico de Valencia -->
 </head>
 <body class="city-page">
 
 <!-- Incluir el header -->
-<div th:replace="header :: header"></div>
+<div th:replace="~{header :: headerAdminLogged}"></div>
 
 <!-- Título de la sucursal -->
 <div class="branch-title">
-    <h1>Sevilla</h1>
+    <h1>Valencia</h1>
 </div>
 
-<!-- Contenido específico de la sucursal de Sevilla -->
+<!-- Contenido específico de la sucursal de Valencia -->
 <div class="branch-info">
     <!-- Texto descriptivo de la sucursal -->
     <div class="branch-text">
-        <h2>Bienvenido a la Sucursal Sevilla</h2>
-        <p>La sucursal de Sevilla abrió sus puertas en 2012 y se ha convertido en una referencia en la región para el alquiler de vehículos. Estamos comprometidos en ofrecer la mejor experiencia para nuestros clientes, tanto locales como visitantes.</p>
-        <p>Nuestra ubicación estratégica cerca del centro histórico de Sevilla permite un acceso rápido y fácil desde cualquier parte de la ciudad.</p>
-        <p>Contamos con una flota variada, que incluye vehículos familiares, deportivos y una selección de motocicletas para los entusiastas de las dos ruedas.</p>
-        <p>Dirección: Calle de la Constitución, 28, Sevilla, España</p>
-        <p>Teléfono: +34 954 123 456</p>
+        <h2>Bienvenido a la Sucursal Valencia</h2>
+        <p>Desde su apertura en 2016, la sucursal de Valencia se ha dedicado a brindar el mejor servicio de alquiler de vehículos en la región. Nuestro objetivo es proporcionar una experiencia de alquiler cómoda y rápida para nuestros clientes.</p>
+        <p>Nuestra ubicación en el centro de Valencia permite un acceso conveniente para locales y visitantes que necesiten un vehículo en la ciudad.</p>
+        <p>La flota incluye vehículos compactos, familiares y algunos modelos de lujo para satisfacer cualquier preferencia.</p>
+        <p>Dirección: Avenida del Puerto, 45, Valencia, España</p>
+        <p>Teléfono: +34 961 234 567</p>
         <p>Horario: Lunes a Viernes de 9:00 a 18:00 | Sábados de 10:00 a 14:00</p>
     </div>
     <div>
     <!-- Imagen de la sucursal -->
     <div class="branch-image">
-        <img src="/images/sevilla.jpg" alt="Sucursal Sevilla" class="branch-img">
+        <img src="/images/valencia.jpg" alt="Sucursal Valencia" class="branch-img">
     </div>
 
     <!-- Botones de acción -->
@@ -44,7 +44,6 @@
     </div>
 </div>
 </div>
-
 <!-- Incluir el footer -->
 <div th:replace="footer :: footer"></div>
 
