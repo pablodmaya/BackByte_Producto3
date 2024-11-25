@@ -1,52 +1,45 @@
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
 
-
 /* Reset de márgenes y padding */
 html, body {
-    height: auto;
+    height: 100%; /* El cuerpo ocupa toda la altura de la ventana */
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Evita barras laterales horizontales */
-    overflow-y: auto;
-    font-family: 'Times New Roman', Times, serif; /* Fuente predeterminada para todo el sitio */
+    font-family: 'Times New Roman', Times, serif;
 }
 
-/* Establecer la estructura principal con Flexbox */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la pantalla */
-    font-size: 1em; /* Tamaño base de la fuente */
-}
-
-/* Contenedor principal */
+/* Contenedor principal (con flexbox) */
 .container {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    min-height: 100vh; /* Asegura que ocupe toda la altura de la pantalla */
 }
 
 /* Barra de navegación */
 .navbar {
     display: flex;
-    justify-content: space-between;  /* Deja espacio entre los elementos */
+    justify-content: space-between;
     align-items: center;
     background-color: #333;
     padding: 10px 20px;
+    position: relative;
+    z-index: 2;
 }
 
-/* Logo y nombre */
+/* Logo y nombre en el header */
 .logo {
     display: flex;
     align-items: center;
 }
 
 .logo-img {
-    width: 40px; /* Ajusta el tamaño del logo */
+    width: 40px;
     height: auto;
     margin-right: 10px;
 }
@@ -57,22 +50,21 @@ body {
     font-weight: bold;
 }
 
-/* Contenedor de los menús centrados */
+/* Menú de navegación */
 .navbar-center {
     display: flex;
-    gap: 15px; /* Ajusta el espacio entre los menús */
+    gap: 15px;
     justify-content: center;
     flex-grow: 1;
-    align-items: center; /* Asegura que todos los elementos estén alineados verticalmente */
+    align-items: center;
 }
 
 /* Estilo para los enlaces en el navbar */
 .navbar-center .auth-links a,
 .navbar-center .dropdown button {
     color: white;
-    font-size: 1.1em; /* Ajuste del tamaño de la fuente */
+    font-size: 1.1em;
     text-decoration: none;
-    font-family: 'Times New Roman', Times, serif; /* Usar la fuente Times New Roman */
 }
 
 /* Menú desplegable */
@@ -86,11 +78,10 @@ body {
     background-color: #333;
     color: white;
     padding: 10px 20px;
-    font-size: 1.1em; /* Ajuste de tamaño de fuente para el botón del dropdown */
+    font-size: 1.1em;
     border: none;
     cursor: pointer;
     text-align: center;
-    font-family: 'Times New Roman', Times, serif;
 }
 
 .dropdown-content {
@@ -110,8 +101,6 @@ body {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    text-align: left;
-    font-family: 'Times New Roman', Times, serif;
 }
 
 .dropdown-content a:hover {
@@ -123,51 +112,52 @@ body {
     color: white;
     text-decoration: none;
     margin-left: 15px;
-    font-family: 'Times New Roman', Times, serif;
 }
 
-/* Hover para los enlaces auth-links */
 .auth-links a:hover {
-    color: #3498db; /* Cambio de color al pasar el ratón */
+    color: #3498db;
 }
 
 /* Sección de imagen principal */
 .main-image {
+    position: absolute; /* La imagen de fondo debe estar fija detrás del contenido */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Asegura que ocupe toda la altura del contenedor */
     background-image: url('/images/fondoHome2.jpg'); /* Imagen principal */
-    background-size: cover;        /* Cubrir toda el área */
-    background-position: center;   /* Centrado de la imagen */
-    background-repeat: no-repeat;  /* Evita repetición de la imagen */
-    height: 80vh;                  /* Ocupa el 80% de la altura de la ventana */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    font-size: 2em;
-    font-weight: bold;
-    padding-bottom: 42px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1; /* La imagen estará detrás del contenido */
 }
 
 /* Formulario de búsqueda de vehículos */
 .search-form {
     background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro y semitransparente */
-    padding: 30px;
+    padding: 40px; /* Aumentar padding para mayor tamaño */
     border-radius: 10px;
     color: #ffffff;
-    font-size: 1em;
+    font-size: 1.33em; /* Aumentar tamaño de texto en un 33% */
     max-width: 90%;
-    width: 800px;
+    width: 1066px; /* Aumentar el tamaño del formulario en un 33% (800px -> 1066px) */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px; /* Ajustamos el espacio entre los elementos */
+    position: absolute; /* Lo posicionamos encima de la imagen */
+    top: 50%; /* Colocamos el formulario a la mitad de la pantalla */
+    left: 50%; /* Lo centramos horizontalmente */
+    transform: translate(-50%, -50%); /* Lo centra completamente en el medio, ajustando también la vertical */
+    z-index: 2; /* Asegura que esté por encima de la imagen */
 }
 
+/* Formulario y demás estilos */
 .search-form .vehicle-type {
     display: flex;
-    gap: 10px;
+    gap: 55px;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Aumentamos el espacio entre los elementos */
 }
 
 .search-form .vehicle-type input[type="radio"] {
@@ -176,20 +166,28 @@ body {
 
 .search-form .vehicle-type label {
     background-color: #666;
-    padding: 10px 20px;
+    padding: 17px 34px; /* Aumentamos el tamaño de los botones */
     border-radius: 5px;
     cursor: pointer;
     color: #fff;
 }
 
+
 .search-form .vehicle-type input[type="radio"]:checked + label {
     background-color: #ff9900;
+}
+
+/* Estilos para las etiquetas <label> */
+.search-form label {
+    font-size: 1.4em; /* Aumentamos el tamaño del texto de las etiquetas */
+    text-align: center; /* Centrar el texto dentro de las etiquetas */
+    margin-bottom: 12px; /* Añadimos separación entre la etiqueta y el campo */
 }
 
 /* Filas de formulario: lugar de recogida y destino, fechas */
 .search-form .row {
     display: flex;
-    gap: 20px;
+    gap: 22px; /* Aumentamos el espacio entre los elementos */
     justify-content: space-between;
 }
 
@@ -199,10 +197,23 @@ body {
     flex-direction: column;
 }
 
+/* Estilos para los campos de entrada (input) */
+.search-form input[type="text"],
+.search-form input[type="date"],
+.search-form select {
+    font-size: 1.2em; /* Aumentamos el tamaño de la fuente dentro de los campos */
+    padding: 12px 10px; /* Aumentamos el padding dentro de los campos */
+    margin-top: 1px; /* Separación entre el texto y el campo de entrada */
+    border-radius: 5px;
+    border: none;
+    text-align: center; /* Centramos el texto dentro del campo */
+}
+
+/* Botón de búsqueda */
 .search-form button {
     background-color: #ff9900;
     color: #ffffff;
-    padding: 12px 24px;
+    padding: 32px 64px; /* Aumentamos el tamaño del botón */
     cursor: pointer;
     font-weight: bold;
     border-radius: 5px;
@@ -214,12 +225,7 @@ body {
     background-color: #ff7700;
 }
 
-.vehiculo-page {
-  overflow-x: hidden; /* Mantiene el desbordamiento vertical oculto */
-  overflow-y: auto; /* Permite el desbordamiento horizontal */
-}
-
-/* Estilos del footer */
+/* Footer */
 footer {
     background-color: #333;
     color: #ffffff;
@@ -227,5 +233,7 @@ footer {
     text-align: center;
     font-size: 1.2em;
     width: 100%;
-    margin-bottom: 0px;
+    margin-top: auto; /* Esto empuja el footer al final */
+    position: relative;
+    z-index: 2; /* Hace que el footer se apile sobre la imagen */
 }
