@@ -1,6 +1,7 @@
 package com.backbyte.service;
 
 import com.backbyte.models.Cliente;
+import com.backbyte.models.Usuario;
 import com.backbyte.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private UsuarioService usuarioService; // Servicio de usuarios
+    private UsuarioService usuarioService;
 
     // Obtener todos los clientes
     public List<Cliente> getClientes() {
@@ -33,20 +34,30 @@ public class ClienteService {
     }
 
     // Actualizar un cliente existente
-    public Cliente updateCliente(Integer id, Cliente clienteDetalles) {
-        return clienteRepository.findById(Long.valueOf(id))
-                .map(cliente -> {
-                    cliente.setNombre(clienteDetalles.getNombre());
-                    cliente.setApellido(clienteDetalles.getApellido());
-                    cliente.setDni(clienteDetalles.getDni());
-                    cliente.setDireccion(clienteDetalles.getDireccion());
-                    cliente.setTelefono(clienteDetalles.getTelefono());
-                    return clienteRepository.save(cliente);
-                })
+    public Cliente updateCliente(Integer id, Usuario usuarioDetalles, Cliente clienteDetalles) {
+        Cliente cliente = clienteRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
+
+        // Actualizar usuario
+        Usuario usuario = cliente.getUsuario();
+        if (usuario != null) {
+            usuario.setNombreUsuario(usuarioDetalles.getNombreUsuario());
+            usuario.setPassword(usuarioDetalles.getPassword());  // Se actualizaría la contraseña aquí
+            usuario.setEmail(usuarioDetalles.getEmail());
+            usuarioService.updateUsuario(usuario);
+        }
+
+        // Actualizar cliente
+        cliente.setNombre(clienteDetalles.getNombre());
+        cliente.setApellido(clienteDetalles.getApellido());
+        cliente.setDni(clienteDetalles.getDni());
+        cliente.setDireccion(clienteDetalles.getDireccion());
+        cliente.setTelefono(clienteDetalles.getTelefono());
+
+        return clienteRepository.save(cliente);
     }
 
-    // Eliminar un cliente junto con su usuario asociado
+    // Eliminar un cliente y su usuario asociado
     public void deleteCliente(Integer id) {
         Optional<Cliente> clienteOptional = clienteRepository.findById(Long.valueOf(id));
         if (clienteOptional.isPresent()) {
@@ -55,7 +66,7 @@ public class ClienteService {
             // Eliminar el cliente primero
             clienteRepository.delete(cliente);
 
-            // Si el cliente tiene un usuario asociado, eliminarlo
+            // Eliminar el usuario asociado
             if (cliente.getUsuario() != null) {
                 usuarioService.deleteUsuario(cliente.getUsuario().getId_Usuario());
             }

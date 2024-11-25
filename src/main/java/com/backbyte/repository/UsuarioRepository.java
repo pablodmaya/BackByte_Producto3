@@ -9,6 +9,9 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
+    // Buscar Usuario por ID de Cliente
+    Usuario findByClienteId(Integer clienteId);
+
     // Metodo para buscar usuarios por nombre
     Optional<Usuario> findByNombreUsuario(String nombreUsuario);
 

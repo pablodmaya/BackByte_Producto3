@@ -1,6 +1,7 @@
 package com.backbyte.controllers;
 
 import com.backbyte.models.Cliente;
+import com.backbyte.models.Usuario;
 import com.backbyte.service.ClienteService;
 import com.backbyte.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,11 @@ public class ClienteController {
         clienteExistente.setDireccion(direccion);
         clienteExistente.setTelefono(telefono);
 
-        clienteService.updateCliente(id, clienteExistente);
+        // Obtener el usuario asociado al cliente
+        Usuario usuario = usuarioService.getUsuarioPorClienteId(id);
+
+        // Llamar al servicio con los tres parámetros
+        clienteService.updateCliente(id, usuario, clienteExistente);
         return "redirect:/admin/clientes";
     }
 
@@ -70,11 +75,6 @@ public class ClienteController {
     public String deleteCliente(@PathVariable Integer id) {
         Cliente cliente = clienteService.getClienteById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
-
-        // Eliminar el usuario asociado al cliente
-        if (cliente.getUsuario() != null) {
-            usuarioService.deleteUsuario(cliente.getUsuario().getId_Usuario());
-        }
 
         // Eliminar el cliente
         clienteService.deleteCliente(id);

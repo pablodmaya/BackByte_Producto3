@@ -2,6 +2,7 @@ package com.backbyte.service;
 
 import com.backbyte.models.Usuario;
 import com.backbyte.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,13 +13,10 @@ import java.util.Optional;
 @Service
 public class UsuarioService implements UserDetailsService {
 
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
-
-    // Método para cargar el usuario por nombre de usuario (Spring Security)
+    // Cargar el usuario por nombre de usuario (Spring Security)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByNombreUsuario(username)
@@ -33,13 +31,28 @@ public class UsuarioService implements UserDetailsService {
 
     // Obtener un usuario por su ID
     public Optional<Usuario> getUsuarioById(Integer id) {
-        return usuarioRepository.findById(Math.toIntExact(Long.valueOf(id)));
+        return usuarioRepository.findById(Integer.valueOf(id));
+    }
+
+    // Obtener un usuario por el id del cliente
+    public Usuario getUsuarioPorClienteId(Integer clienteId) {
+        return usuarioRepository.findByClienteId(clienteId);
+    }
+
+    // Agregar un nuevo usuario
+    public Usuario addUsuario(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
+    // Actualizar un usuario existente
+    public Usuario updateUsuario(Usuario usuarioDetalles) {
+        return usuarioRepository.save(usuarioDetalles);
     }
 
     // Eliminar un usuario por su ID
     public void deleteUsuario(Integer id) {
-        if (usuarioRepository.existsById(Math.toIntExact(Long.valueOf(id)))) {
-            usuarioRepository.deleteById(Math.toIntExact(Long.valueOf(id)));
+        if (usuarioRepository.existsById(Integer.valueOf(id))) {
+            usuarioRepository.deleteById(Integer.valueOf(id));
         } else {
             throw new RuntimeException("Usuario no encontrado con id: " + id);
         }
