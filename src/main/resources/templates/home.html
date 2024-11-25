@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label for="pickupLocation">Ciudad de recogida</label>
                     <select id="pickupLocation" name="pickupLocation" required>
-                        <option value="" disabled selected>Selecciona la ciudad de recogida</option>
+                        <option value="" disabled selected></option>
                         <option th:each="ciudad : ${ciudades}"
                                 th:value="${ciudad}"
                                 th:text="${ciudad}">
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="dropoffLocation">Ciudad de destino</label>
                     <select id="dropoffLocation" name="dropoffLocation" required>
-                        <option value="" disabled selected>Selecciona la ciudad de destino</option>
+                        <option value="" disabled selected></option>
                         <option th:each="ciudad : ${ciudades}"
                                 th:value="${ciudad}"
                                 th:text="${ciudad}">

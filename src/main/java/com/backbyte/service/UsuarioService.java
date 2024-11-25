@@ -1,11 +1,13 @@
 package com.backbyte.service;
 
-import com.backbyte.repository.UsuarioRepository;
 import com.backbyte.models.Usuario;
+import com.backbyte.repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -16,18 +18,30 @@ public class UsuarioService implements UserDetailsService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // Método para cargar el usuario por nombre de usuario
+    // Método para cargar el usuario por nombre de usuario (Spring Security)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByNombreUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-        // Compara la contraseña proporcionada (en texto claro) con la contraseña encriptada de la base de datos
-        // Aquí se hace una validación implícita cuando Spring Security la usa
         return new org.springframework.security.core.userdetails.User(
                 usuario.getNombreUsuario(),
-                usuario.getPasswordEncriptada(),  // Debe ser la contraseña encriptada
+                usuario.getPasswordEncriptada(), // Contraseña encriptada
                 usuario.getAuthorities()
         );
+    }
+
+    // Obtener un usuario por su ID
+    public Optional<Usuario> getUsuarioById(Integer id) {
+        return usuarioRepository.findById(Math.toIntExact(Long.valueOf(id)));
+    }
+
+    // Eliminar un usuario por su ID
+    public void deleteUsuario(Integer id) {
+        if (usuarioRepository.existsById(Math.toIntExact(Long.valueOf(id)))) {
+            usuarioRepository.deleteById(Math.toIntExact(Long.valueOf(id)));
+        } else {
+            throw new RuntimeException("Usuario no encontrado con id: " + id);
+        }
     }
 }

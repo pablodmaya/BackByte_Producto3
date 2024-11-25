@@ -19,53 +19,10 @@
     <!-- Main Image Section -->
     <div class="main-image">
         <form class="search-form">
-            <!-- Fila 1: Selección de tipo de vehículo -->
-            <div class="vehicle-type">
-                <input type="radio" id="car" name="vehicleType" value="car" checked>
-                <label for="car">Coche</label>
-                <input type="radio" id="motorcycle" name="vehicleType" value="motorcycle">
-                <label for="motorcycle">Moto</label>
-            </div>
-
-            <!-- Fila 2: Lugar de recogida y destino -->
-            <div class="row">
-                <div class="form-group">
-                    <label for="pickupLocation">Ciudad de recogida</label>
-                    <select id="pickupLocation" name="pickupLocation" required>
-                        <option value="" disabled selected>Selecciona la ciudad de recogida</option>
-                        <option th:each="ciudad : ${ciudades}"
-                                th:value="${ciudad}"
-                                th:text="${ciudad}">
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="dropoffLocation">Ciudad de destino</label>
-                    <select id="dropoffLocation" name="dropoffLocation" required>
-                        <option value="" disabled selected>Selecciona la ciudad de destino</option>
-                        <option th:each="ciudad : ${ciudades}"
-                                th:value="${ciudad}"
-                                th:text="${ciudad}">
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-
-            <!-- Fila 3: Fecha de inicio y fecha final -->
-            <div class="row">
-                <div class="form-group">
-                    <label for="startDate">Fecha de recogida</label>
-                    <input type="date" id="startDate" name="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">Fecha de devolución</label>
-                    <input type="date" id="endDate" name="endDate" required>
-                </div>
-            </div>
-
-            <!-- Fila 4: Botón de búsqueda -->
-            <button type="submit">Buscar</button>
+            <p>Menú de Administración:</p>
+            <a th:href="@{/admin/vehiculos}" class="btn">Gestión de Vehiculos</a>
+            <a th:href="@{/admin/clientes}" class="btn">Gestión de Clientes</a>
+            <a th:href="@{/admin/reservas}" class="btn">Gestión de Reservas</a>
         </form>
     </div>
 

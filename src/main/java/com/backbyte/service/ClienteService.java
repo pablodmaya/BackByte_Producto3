@@ -14,6 +14,9 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private UsuarioService usuarioService; // Servicio de usuarios
+
     // Obtener todos los clientes
     public List<Cliente> getClientes() {
         return clienteRepository.findAll();
@@ -43,10 +46,19 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
     }
 
-    // Eliminar un cliente
+    // Eliminar un cliente junto con su usuario asociado
     public void deleteCliente(Integer id) {
-        if (clienteRepository.existsById(Long.valueOf(id))) {
-            clienteRepository.deleteById(Long.valueOf(id));
+        Optional<Cliente> clienteOptional = clienteRepository.findById(Long.valueOf(id));
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+
+            // Eliminar el cliente primero
+            clienteRepository.delete(cliente);
+
+            // Si el cliente tiene un usuario asociado, eliminarlo
+            if (cliente.getUsuario() != null) {
+                usuarioService.deleteUsuario(cliente.getUsuario().getId_Usuario());
+            }
         } else {
             throw new RuntimeException("Cliente no encontrado con id: " + id);
         }
