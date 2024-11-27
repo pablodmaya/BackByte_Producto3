@@ -3,17 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Reserva Confirmada</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f8f5; /* Fondo verde claro */
-            font-family: Arial, sans-serif;
-        }
+
         .card {
             background-color: #ffffff;
             border: 2px solid #a2d5c6; /* Borde verde suave */
@@ -22,7 +14,16 @@
             text-align: center;
             padding: 20px;
             width: 400px;
+
         }
+
+        .centrar-card {
+            display: flex; /* Activar Flexbox */
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center;
+            margin-top: 45px;
+        }
+
         .card h1 {
             color: #2e8b57; /* Verde oscuro */
             margin-bottom: 15px;
@@ -45,14 +46,34 @@
         .card button:hover {
             background-color: #2e8b57; /* Verde oscuro al pasar el mouse */
         }
+         .fondo-gradiente{
+background: linear-gradient(to right, #dbeafe, #93c5fd, #3b82f6);
+}
     </style>
 </head>
-<body>
-<div class="card">
-    <h1>Reserva confirmada</h1>
-    <p th:text="${mensaje}">Gracias por confiar en nosotros. Pronto recibirás un correo con los detalles de tu reserva.</p>
-    <a th:href="@{/user/mis-reservas}">Revisar mis reservas</a>
+<body class="fondo-gradiente">
+
+<div class="container">
+
+    <div th:replace="~{header :: headerUserLogged}"></div>
+
+<div class="centrar-card">
+
+    <div class="card">
+        <h1>Reserva confirmada</h1>
+        <p th:text="${mensaje}">Gracias por confiar en nosotros. Pronto recibirás un correo con los detalles de tu reserva.</p>
+        <a th:href="@{/user/mis-reservas}">Revisar mis reservas</a>
+
+    </div>
 
 </div>
+
+    <div th:replace="footer :: footer"></div>
+
+
+</div>
+
+
+
 </body>
 </html>

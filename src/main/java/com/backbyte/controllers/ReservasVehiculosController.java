@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -30,6 +32,9 @@ public class ReservasVehiculosController {
 
     @Autowired
     private UsuarioRepository UsuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/user/buscar-vehiculos")
     public String buscarVehiculos(@RequestParam("vehicleType") String vehicleType,
@@ -196,6 +201,12 @@ public class ReservasVehiculosController {
         Usuario usuario = UsuarioRepository.findByNombreUsuario(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        if (!usuario.getEs_Cliente() ) {
+            // Si no es cliente, redirigir o mostrar mensaje adecuado
+            model.addAttribute("usuario", usuario);
+            return "user/misReservas"; // O cualquier URL que decida redirigir
+        }
+
         // Obtener el ID del usuario autenticado
         Integer idUsuario = usuario.getId_Usuario();
 
@@ -214,6 +225,8 @@ public class ReservasVehiculosController {
         model.addAttribute("cliente", cliente);
         // Pasar los datos al modelo
         model.addAttribute("alquileres", alquileres);
+
+        model.addAttribute("usuario", usuario);
 
 //         Agregar mensaje de éxito si existe
         if ("true".equals(success)) {
@@ -237,6 +250,141 @@ public class ReservasVehiculosController {
         return "redirect:/user/mis-reservas" + "?success=true";
     }
 
+
+    @GetMapping("/user/mi-perfil")
+    public String mostrarPerfil(Model model, String success) {
+
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Nombre de usuario del usuario autenticado
+
+        // Buscar al usuario en el repositorio
+        Usuario usuario = UsuarioRepository.findByNombreUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtener el ID del usuario autenticado
+        Integer idUsuario = usuario.getId_Usuario();
+
+        // Si es cliente, buscar información adicional
+        Cliente cliente = clienteRepository.findByUsuarioId(Long.valueOf(idUsuario));
+
+        // Agregar datos del usuario y del cliente (si aplica) al modelo
+        model.addAttribute("usuario", usuario);
+        if (cliente != null) {
+            model.addAttribute("cliente", cliente);
+        }
+        if ("true".equals(success)) {
+            model.addAttribute("mensajeExito", "Se han actualizado tus datos!");
+        }
+
+        // Retornar la vista del perfil
+        return "user/miPerfil";
+    }
+
+
+    @PostMapping("/user/mi-perfil")
+    public String actualizarPerfil(
+            @ModelAttribute Usuario usuarioActualizado,
+            @ModelAttribute Cliente clienteActualizado,
+            Model model) {
+
+        // Actualizar datos de usuario
+        Usuario usuarioExistente = UsuarioRepository.findById(usuarioActualizado.getId_Usuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuarioExistente.setEmail(usuarioActualizado.getEmail());
+        usuarioExistente.setNombreUsuario(usuarioActualizado.getNombreUsuario());
+        UsuarioRepository.save(usuarioExistente);
+
+        // Actualizar datos de cliente
+        if (clienteActualizado != null) {
+            Cliente clienteExistente = clienteRepository.findById(clienteActualizado.getId_Cliente().longValue())
+                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            clienteExistente.setNombre(clienteActualizado.getNombre());
+            clienteExistente.setApellido(clienteActualizado.getApellido());
+            clienteExistente.setDni(clienteActualizado.getDni());
+            clienteExistente.setDireccion(clienteActualizado.getDireccion());
+            clienteExistente.setTelefono(clienteActualizado.getTelefono());
+            clienteRepository.save(clienteExistente);
+        }
+
+
+        // Redirigir con un mensaje de éxito
+        model.addAttribute("mensajeExito", "Datos actualizados correctamente.");
+        return "redirect:/user/mi-perfil" + "?success=true";
+    }
+
+    @GetMapping("/user/cambiar-password")
+    public String mostrarFormularioCambioContrasena(Model model, String error, String error2, String error3, String success) {
+
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Nombre de usuario del usuario autenticado
+
+        // Buscar al usuario en el repositorio
+        Usuario usuario = UsuarioRepository.findByNombreUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        model.addAttribute("usuario", usuario);
+
+        if ("true".equals(error)) {
+            model.addAttribute("mensajeError", "No has proporcionado la contraseña correcta ");
+        }
+        if ("true".equals(error2)) {
+            model.addAttribute("mensajeError2", "Las contraseñas no son iguales");
+        }
+        if ("true".equals(error3)) {
+            model.addAttribute("mensajeError3", "La contraseña nueva no puede ser igual a la actual");
+        }
+        if ("true".equals(success)) {
+            model.addAttribute("mensajeExito", "Contraseña cambiada y registrada correctamente!");
+        }
+        return "user/cambiarPassword";
+    }
+
+    @PostMapping("/user/cambiar-password")
+    public String cambiarContrasena(@RequestParam("currentPassword") String currentPassword,
+                                    @RequestParam("newPassword") String newPassword,
+                                    @RequestParam("confirmPassword") String confirmPassword,
+                                    @ModelAttribute Usuario usuarioActualizado,
+                                    Model model) {
+
+
+
+        Usuario usuarioExistente = UsuarioRepository.findById(usuarioActualizado.getId_Usuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+
+        // Verifica que la contraseña actual coincida
+        if (!passwordEncoder.matches(currentPassword, usuarioExistente.getPasswordEncriptada())) {
+
+            return "redirect:/user/cambiar-password" + "?error=true";
+        }
+
+        // Verifica que la nueva contraseña y la confirmación coincidan
+        if (!newPassword.equals(confirmPassword)) {
+
+            return "redirect:/user/cambiar-password" + "?error2=true";
+        }
+
+        // Verifica que la nueva contraseña sea diferente de la actual
+        if (passwordEncoder.matches(newPassword, usuarioExistente.getPassword())) {
+
+            return "redirect:/user/cambiar-password" + "?error3=true";
+        }
+
+        // Codifica la nueva contraseña
+        String nuevaContrasenaCodificada = passwordEncoder.encode(newPassword);
+
+        // Actualiza la contraseña del usuario en la base de datos
+        usuarioExistente.setPassword(newPassword);
+        usuarioExistente.setPasswordEncriptada(nuevaContrasenaCodificada);
+        UsuarioRepository.save(usuarioExistente);
+
+        // Agrega un mensaje de éxito
+
+
+        return "redirect:/user/cambiar-password" + "?success=true";
+    }
 
 }
 

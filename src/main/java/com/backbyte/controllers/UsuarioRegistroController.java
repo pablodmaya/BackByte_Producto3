@@ -41,4 +41,6 @@ public class UsuarioRegistroController {
 
         return "redirect:/home";
     }
+
+
 }
